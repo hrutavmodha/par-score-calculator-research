@@ -43,3 +43,14 @@ calculator.logSimulationResult(
   { score: 160, wickets: 10, overs: 18.4, scheduledOvers: 20 },
   { score: 100, wickets: 6, overs: 15, scheduledOvers: 20 }
 );
+
+/**
+ * 5. Fractional Overs Test
+ * Team B at 15.2 overs (should be 15.3333 dec)
+ */
+calculator.logSimulationResult(
+  "Fractional Overs Test (15.2 overs)",
+  "T20",
+  { score: 180, wickets: 5, overs: 20, scheduledOvers: 20 },
+  { score: 100, wickets: 4, overs: 15.2, scheduledOvers: 20 }
+);

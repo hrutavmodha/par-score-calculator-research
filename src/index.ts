@@ -72,8 +72,9 @@ export class CruxCalculator {
     console.log(`SCENARIO: ${name}`);
     console.log(`FORMAT:   ${format}`);
     console.log(`--------------------------------------------------`);
-    console.log(`Team A Stats: ${teamA.score}/${teamA.wickets} (${teamA.overs} / ${teamA.scheduledOvers})`);
-    console.log(`Team B Stats: ${teamB.score}/${teamB.wickets} (${teamB.overs} / ${teamB.scheduledOvers}) [At Interruption]`);
+    console.log(`Team A: ${teamA.score}/${teamA.wickets} (${teamA.overs.toFixed(1)})`);
+    console.log(`Team B: ${teamB.score}/${teamB.wickets} (${teamB.overs.toFixed(1)}) [At Interruption]`);
+    console.log(`Scheduled: ${teamA.scheduledOvers.toFixed(1)} overs`);
     console.log(`--------------------------------------------------`);
     console.log(`[Resources]`);
     console.log(`R_used,1 (Team A): ${rUsed1.toFixed(4)} pts`);
