@@ -16,7 +16,7 @@
 \maketitle
 
 \begin{abstract}
-\noindent Current methods for calculating revised targets in rain-affected limited-overs cricket matches either fail through mathematical oversimplification or through reliance on empirical statistical probability curves. This paper proposes a deterministic physical container model---the Crux --- Cross-Resource Utilization Index Method---that maps the discrete resource structure of a cricket innings into a fixed 200-point capacity matrix. This model accounts for the physical entanglement of overs and wickets through a cross-coupling forfeiture mechanism. By treating the innings as a finite vessel of potential, the Crux method provides a format-agnostic framework that is formally specified for both T20 and ODI matches, ensuring mathematical stability through a dynamic stabilizer $D$ and a mutable-$N$ design for multiple interruptions.
+\indent This paper proposes a deterministic physical container model---the Crux --- Cross-Resource Utilization Index Method---that maps the discrete resource structure of a cricket innings into a fixed 200-point capacity matrix. This model accounts for the physical entanglement of overs and wickets through a cross-coupling forfeiture mechanism. By treating the innings as a finite vessel of potential, the Crux method provides a format-agnostic framework that is formally specified for both T20 and ODI matches, ensuring mathematical stability through a dynamic stabilizer $D$ and a mutable-$N$ design for multiple interruptions.
 \end{abstract}
 
 \newpage
@@ -27,84 +27,84 @@
 
 \subsection{Expectation of Knowledge from Readers}
 
-Readers are expected to possess a firm and nuanced understanding of limited-overs cricket mechanics, specifically within the context of the T20 and ODI formats. This includes the fundamental interplay between consumed overs, wickets lost, fielding restrictions (Powerplays), and the physical constraints of a scheduled innings. The reader must understand that these two primary resources---overs and wickets---are not independent variables operating in isolation. A team cannot consume overs without exposing wickets to risk, and conversely, a team cannot preserve wickets without the unavoidable passage of time (overs). 
+\indent Readers are expected to possess a firm and nuanced understanding of limited-overs cricket mechanics, specifically within the context of the T20 and ODI formats. This includes the fundamental interplay between consumed overs, wickets lost, fielding restrictions (Powerplays), and the physical constraints of a scheduled innings. The reader must understand that these two primary resources---overs and wickets---are not independent variables operating in isolation. A team cannot consume overs without exposing wickets to risk, and conversely, a team cannot preserve wickets without the unavoidable passage of time (overs). 
 
-Mathematically, the reader should be familiar with the application of piecewise continuous step functions and discrete summation over bounded intervals. A working knowledge of the Duckworth-Lewis-Stern (DLS) method, at minimum at the conceptual and philosophical level, is assumed for the comparative sections of this paper. The reader should be prepared to analyze the innings not as a statistical distribution of probable outcomes, but as a finite ``physical container'' of potential energy.
+\indent Mathematically, the reader should be familiar with the application of piecewise continuous step functions and discrete summation over bounded intervals. A working knowledge of the Duckworth-Lewis-Stern (DLS) method, at minimum at the conceptual and philosophical level, is assumed for the comparative sections of this paper. The reader should be prepared to analyze the innings not as a statistical distribution of probable outcomes, but as a finite ``physical container'' of potential energy.
 
 \subsection{Rain Delays in Cricket}
 
-Cricket is a sport inherently bound by the dual constraints of time and weather. A full T20 innings is scheduled for 20 overs; a full ODI innings for 50 overs. When rain interrupts a match, the scheduled overs ($N$) are reduced either prospectively (before play resumes) or retrospectively (at the moment the innings is closed by the umpires). 
+\indent Cricket is a sport inherently bound by the dual constraints of time and weather. A full T20 innings is scheduled for 20 overs; a full ODI innings for 50 overs. When rain interrupts a match, the scheduled overs ($N$) are reduced either prospectively (before play resumes) or retrospectively (at the moment the innings is closed by the umpires). 
 
-This physical truncation breaks the linear progression of the game in a manner that affects both teams asymmetrically. When rain interrupts the first innings, the team batting first loses scheduled overs that they may have exploited for aggressive scoring, particularly in the ``death'' phase where run rates are historically at their peak. When rain interrupts the second innings, the chasing team is either penalized (fewer overs to chase) or advantaged (target already set, but a small, high-intensity chase remains). These two scenarios require fundamentally different mathematical treatments, and the failure to separate them is the primary architectural flaw in naive target revision systems. 
+\indent This physical truncation breaks the linear progression of the game in a manner that affects both teams asymmetrically. When rain interrupts the first innings, the team batting first loses scheduled overs that they may have exploited for aggressive scoring, particularly in the ``death'' phase where run rates are historically at their peak. When rain interrupts the second innings, the chasing team is either penalized (fewer overs to chase) or advantaged (target already set, but a small, high-intensity chase remains). These two scenarios require fundamentally different mathematical treatments, and the failure to separate them is the primary architectural flaw in naive target revision systems. 
 
-Multiple rain interruptions compound this asymmetry, creating a ``shrinking container'' effect. After each interruption, the physical capacity of the match decreases. Any formula that does not dynamically track the current scheduled maximum ($N$) will operate on a flawed mathematical baseline, as overs that have been washed out must be strictly deducted from the calculation to preserve the integrity of the resource ratio.
+\indent Multiple rain interruptions compound this asymmetry, creating a ``shrinking container'' effect. After each interruption, the physical capacity of the match decreases. Any formula that does not dynamically track the current scheduled maximum ($N$) will operate on a flawed mathematical baseline, as overs that have been washed out must be strictly deducted from the calculation to preserve the integrity of the resource ratio.
 
 \subsection{The Need of Par Score}
 
-Because a truncated match features physically asymmetric resources, comparing raw run totals is mathematically invalid and structurally unfair. A team that bats 15 overs on a full-length pitch is not comparable to a team that bats 15 overs knowing the innings will close at exactly that point. The knowledge of the endpoint changes the ``resource deployment strategy'' of the batting side.
+\indent Because a truncated match features physically asymmetric resources, comparing raw run totals is mathematically invalid and structurally unfair. A team that bats 15 overs on a full-length pitch is not comparable to a team that bats 15 overs knowing the innings will close at exactly that point. The knowledge of the endpoint changes the ``resource deployment strategy'' of the batting side.
 
-A Par Score is the minimum score the chasing team must reach at any snapshot in time to be mathematically tied with the first team, rigorously accounting for overs consumed and wickets lost at the time of interruption. It serves as the ``equilibrium point'' that balances the resource consumption between the two competing innings, ensuring that the disadvantage of an interruption is shared as fairly as possible according to the deterministic laws of the sport's structure.
+\indent A Par Score is the minimum score the chasing team must reach at any snapshot in time to be mathematically tied with the first team, rigorously accounting for overs consumed and wickets lost at the time of interruption. It serves as the ``equilibrium point'' that balances the resource consumption between the two competing innings, ensuring that the disadvantage of an interruption is shared as fairly as possible according to the deterministic laws of the sport's structure.
 
 \section{Introduction to Method}
 
 \subsection{The Master Formula}
 
-The Par Score at any moment of interruption is calculated using the following primary governing equation:
+\indent The Par Score at any moment of interruption is calculated using the following primary governing equation:
 
 \begin{equation}
 Par = Score_A \times \left( \frac{R_{used,2} + D}{R_{used,1} + D} \right)
 \end{equation}
 
-In this formula, $Score_A$ represents the final total achieved by Team A. $R_{used,1}$ is the total resource footprint consumed by the team batting first at the conclusion of their innings, $R_{used,2}$ is the resource footprint consumed by the chasing team at the moment of interruption, and $D$ is the dynamic stabilizer variable. This ratio represents the ``transfer of value'' from the first innings to the second based on the proportion of the total capacity utilized by each team.
+\indent In this formula, $Score_A$ represents the final total achieved by Team A. $R_{used,1}$ is the total resource footprint consumed by the team batting first at the conclusion of their innings, $R_{used,2}$ is the resource footprint consumed by the chasing team at the moment of interruption, and $D$ is the dynamic stabilizer variable. This ratio represents the ``transfer of value'' from the first innings to the second based on the proportion of the total capacity utilized by each team.
 
 \subsection{Description, Definitions, and Mathematical Statements}
 
-The Crux method replaces historical statistical probability with a deterministic physical container model. The key definitions required for the implementation of this method are as follows:
+\indent The Crux method replaces historical statistical probability with a deterministic physical container model. The key definitions required for the implementation of this method are as follows:
 
 \begin{itemize}
-    \item \textbf{$R_{used,1}$}: The exact mathematical footprint consumed by Team A. For a completed, uninterrupted first innings, this always equals $P_{total} = 200$, making the stabilizer $D = 0$ and simplifying the Par formula to a direct resource ratio.
-    \item \textbf{$R_{used,2}$}: The exact mathematical footprint consumed by Team B at the moment of interruption. This includes both the ``active'' consumption (overs bowled and wickets lost) and the ``passive'' forfeiture (the destruction of future potential capacity caused by the current state of the match).
-    \item \textbf{$D$}: The dynamic stabilizer, an engineered offset designed to prevent the Par ratio from producing an asymptotic result when Team A's innings was itself interrupted and their $R_{used,1}$ is significantly below the 200-point ceiling.
-    \item \textbf{$N$}: The current scheduled maximum overs for the match. Unlike traditional methods that treat this as a constant, the Crux method treats $N$ as a mutable state variable that must be updated at every snapshot of the match.
+\item \textbf{$R_{used,1}$}: The exact mathematical footprint consumed by Team A. For a completed, uninterrupted first innings, this always equals $P_{total} = 200$, making the stabilizer $D = 0$ and simplifying the Par formula to a direct resource ratio.
+\item \textbf{$R_{used,2}$}: The exact mathematical footprint consumed by Team B at the moment of interruption. This includes both the ``active'' consumption (overs bowled and wickets lost) and the ``passive'' forfeiture (the destruction of future potential capacity caused by the current state of the match).
+\item \textbf{$D$}: The dynamic stabilizer, an engineered offset designed to prevent the Par ratio from producing an asymptotic result when Team A's innings was itself interrupted and their $R_{used,1}$ is significantly below the 200-point ceiling.
+\item \textbf{$N$}: The current scheduled maximum overs for the match. Unlike traditional methods that treat this as a constant, the Crux method treats $N$ as a mutable state variable that must be updated at every snapshot of the match.
 \end{itemize}
 
-Unlike exponential probability curves fitted to historical averages, this approach bounds the mathematical output within strict physical capacities defined by the dimensions of the sport itself.
+\indent Unlike exponential probability curves fitted to historical averages, this approach bounds the mathematical output within strict physical capacities defined by the dimensions of the sport itself.
 
 \section{Exploring Existing Methods}
 
 \subsection{The Run Rate Method}
 
-The Average Run Rate (ARR) method was the earliest attempt at target revision. It calculates the required target by multiplying Team A's run rate by the number of overs available to Team B:
+\indent The Average Run Rate (ARR) method was the earliest attempt at target revision. It calculates the required target by multiplying Team A's run rate by the number of overs available to Team B:
 
 \begin{equation}
 Target_{ARR} = \left( \frac{Score_A}{N_A} \right) \times N_B + 1
 \end{equation}
 
-This is a single-variable linear equation that operates entirely in the dimension of time (overs), treating wickets as irrelevant. A team that scores 180/2 and a team that scores 180/9 in the same number of overs generate identical targets under ARR, despite the obvious difference in their batting positions and survival capacity. The method fundamentally ignores one of the two core resources of a cricket innings: wickets.
+\indent This is a single-variable linear equation that operates entirely in the dimension of time (overs), treating wickets as irrelevant. A team that scores 180/2 and a team that scores 180/9 in the same number of overs generate identical targets under ARR, despite the obvious difference in their batting positions and survival capacity. The method fundamentally ignores one of the two core resources of a cricket innings: wickets.
 
 \subsection{The Most Productive Over Method}
 
-The MPO method attempted to construct a fair target by identifying which of Team A's overs were most productive and assuming Team B would bat against equivalently productive bowling. When rain cuts overs from Team B's innings, the method revises the target downward by subtracting the runs scored in Team A's least productive overs. 
+\indent The MPO method attempted to construct a fair target by identifying which of Team A's overs were most productive and assuming Team B would bat against equivalently productive bowling. When rain cuts overs from Team B's innings, the method revises the target downward by subtracting the runs scored in Team A's least productive overs. 
 
-This structurally punished Team B in high-scoring matches: a team that scored heavily throughout their innings, with no ``disposable'' low-run overs, would have their target revised downward only minimally, while a team that had one or two quiet periods would lose those overs cheaply. The method has no mathematical relationship to wickets whatsoever and was quickly abandoned by the ICC due to its illogical outcomes.
+\indent This structurally punished Team B in high-scoring matches: a team that scored heavily throughout their innings, with no ``disposable'' low-run overs, would have their target revised downward only minimally, while a team that had one or two quiet periods would lose those overs cheaply. The method has no mathematical relationship to wickets whatsoever and was quickly abandoned by the ICC due to its illogical outcomes.
 
 \subsection{The Duckworth-Lewis-Stern Method}
 
-The current ICC standard, the Duckworth-Lewis-Stern (DLS) method, models the run-scoring resources of a batting team as a function of two variables: overs remaining and wickets in hand. The resource function takes the form of an exponential decay:
+\indent The current ICC standard, the Duckworth-Lewis-Stern (DLS) method, models the run-scoring resources of a batting team as a function of two variables: overs remaining and wickets in hand. The resource function takes the form of an exponential decay:
 
 \begin{equation}
 Z(u, w) = Z_0(w) \left[ 1 - e^{-b(w) \cdot u} \right]
 \end{equation}
 
-The philosophical core of DLS is probability: it asks, given a historical distribution of match outcomes, what is the expected run-scoring potential of a team in this state? This creates structural limitations including regression to the historical mean and the asymptotic ceiling problem.
+\indent The philosophical core of DLS is probability: it asks, given a historical distribution of match outcomes, what is the expected run-scoring potential of a team in this state? This creates structural limitations including regression to the historical mean and the asymptotic ceiling problem.
 
 \section{The Crux — Cross-Resource Utilization Index Method}
 
 \subsection{Establishing Total Resource Points}
 
-The fundamental axiom of the Crux method is that a cricket innings is a finite container of potential, represented by a fixed 200-point capacity matrix ($P_{total}$). However, the allocation of these points between the two primary dimensions---overs and wickets---varies fundamentally between formats:
+\indent The fundamental axiom of the Crux method is that a cricket innings is a finite container of potential, represented by a fixed 200-point capacity matrix ($P_{total}$). However, the allocation of these points between the two primary dimensions---overs and wickets---varies fundamentally between formats:
 
-In \textbf{T20I} cricket, the 200 points are split in an \textbf{80:20 ratio} (160 over-points, 40 wicket-points).
+\indent In \textbf{T20I} cricket, the 200 points are split in an \textbf{80:20 ratio} (160 over-points, 40 wicket-points).
 In \textbf{ODI} cricket, the 200 points are split in a \textbf{70:30 ratio} (140 over-points, 60 wicket-points).
 
 \begin{center}
@@ -124,64 +124,64 @@ Total Wicket Capacity $W_{total}$ & 40 & 20\% & 60 & 30\% \\
 
 \subsection{Distributing Resource Points Across Over Phases in T20}
 
-The accumulated over-points $O(u)$ for T20 are defined by discrete summation:
+\indent The accumulated over-points $O(u)$ for T20 are defined by discrete summation:
 
 \subsubsection{Powerplay - Overs 1 to 6}
-$f_{T20}(x) = 9 \text{ points/over} \Rightarrow \sum_{x=1}^{6} 9 = 54 \text{ points}$.
+\indent $f_{T20}(x) = 9 \text{ points/over} \Rightarrow \sum_{x=1}^{6} 9 = 54 \text{ points}$.
 
 \subsubsection{Middle Overs - Overs 7 to 15}
-$f_{T20}(x) = 4 \text{ points/over} \Rightarrow \sum_{x=7}^{15} 4 = 36 \text{ points}$.
+\indent $f_{T20}(x) = 4 \text{ points/over} \Rightarrow \sum_{x=7}^{15} 4 = 36 \text{ points}$.
 
 \subsubsection{Death Overs - Overs 16 to 20}
-$f_{T20}(x) = 14 \text{ points/over} \Rightarrow \sum_{x=16}^{20} 14 = 70 \text{ points}$.
+\indent $f_{T20}(x) = 14 \text{ points/over} \Rightarrow \sum_{x=16}^{20} 14 = 70 \text{ points}$.
 
 \vspace{1em}
 \noindent \textbf{Total T20 Over Capacity:} $54 + 36 + 70 = 160$ points.
 
 \subsection{Distributing Resource Points Across Over Phases in ODI}
 
-The accumulated over-points $O(u)$ for ODI are defined by:
+\indent The accumulated over-points $O(u)$ for ODI are defined by:
 
 \subsubsection{Powerplay - Overs 1 to 10}
-$f_{ODI}(x) = 3 \text{ points/over} \Rightarrow \sum_{x=1}^{10} 3 = 30 \text{ points}$.
+\indent $f_{ODI}(x) = 3 \text{ points/over} \Rightarrow \sum_{x=1}^{10} 3 = 30 \text{ points}$.
 
 \subsubsection{Middle Overs - Overs 11 to 40}
-$f_{ODI}(x) = 2 \text{ points/over} \Rightarrow \sum_{x=11}^{40} 2 = 60 \text{ points}$.
+\indent $f_{ODI}(x) = 2 \text{ points/over} \Rightarrow \sum_{x=11}^{40} 2 = 60 \text{ points}$.
 
 \subsubsection{Death Overs - Overs 41 to 50}
-$f_{ODI}(x) = 5 \text{ points/over} \Rightarrow \sum_{x=41}^{50} 5 = 50 \text{ points}$.
+\indent $f_{ODI}(x) = 5 \text{ points/over} \Rightarrow \sum_{x=41}^{50} 5 = 50 \text{ points}$.
 
 \vspace{1em}
 \noindent \textbf{Total ODI Over Capacity:} $30 + 60 + 50 = 140$ points.
 
 \subsection{Distributing Resource Points Across Wicket Tiers in T20}
 
-Wicket points $W(w)$ for T20 are defined by:
+\indent Wicket points $W(w)$ for T20 are defined by:
 
 \subsubsection{Top Order}
-$g_{T20}(y) = 6 \text{ points/wicket (Wickets 1--3)} \Rightarrow \sum_{y=1}^{3} 6 = 18 \text{ points}$.
+\indent $g_{T20}(y) = 6 \text{ points/wicket (Wickets 1--3)} \Rightarrow \sum_{y=1}^{3} 6 = 18 \text{ points}$.
 
 \subsubsection{Middle Order}
-$g_{T20}(y) = 4 \text{ points/wicket (Wickets 4--7)} \Rightarrow \sum_{y=4}^{7} 4 = 16 \text{ points}$.
+\indent $g_{T20}(y) = 4 \text{ points/wicket (Wickets 4--7)} \Rightarrow \sum_{y=4}^{7} 4 = 16 \text{ points}$.
 
 \subsubsection{Tailenders}
-$g_{T20}(y) = 2 \text{ points/wicket (Wickets 8--10)} \Rightarrow \sum_{y=8}^{10} 2 = 6 \text{ points}$.
+\indent $g_{T20}(y) = 2 \text{ points/wicket (Wickets 8--10)} \Rightarrow \sum_{y=8}^{10} 2 = 6 \text{ points}$.
 
 \vspace{1em}
 \noindent \textbf{Total T20 Wicket Capacity:} $18 + 16 + 6 = 40$ points.
 
 \subsection{Distributing Resource Points Across Wicket Tiers in ODI}
 
-Wicket points $W(w)$ for ODI are defined by:
+\indent Wicket points $W(w)$ for ODI are defined by:
 
 \subsubsection{Top Order}
-$g_{ODI}(y) = 9 \text{ points/wicket (Wickets 1--3)} \Rightarrow \sum_{y=1}^{3} 9 = 27 \text{ points}$.
+\indent $g_{ODI}(y) = 9 \text{ points/wicket (Wickets 1--3)} \Rightarrow \sum_{y=1}^{3} 9 = 27 \text{ points}$.
 
 \subsubsection{Middle Order}
-$g_{ODI}(y) = 6 \text{ points/wicket (Wickets 4--7)} \Rightarrow \sum_{y=4}^{7} 6 = 24 \text{ points}$.
+\indent $g_{ODI}(y) = 6 \text{ points/wicket (Wickets 4--7)} \Rightarrow \sum_{y=4}^{7} 6 = 24 \text{ points}$.
 
 \subsubsection{Tailenders}
-$g_{ODI}(y) = 3 \text{ points/wicket (Wickets 8--10)} \Rightarrow \sum_{y=8}^{10} 3 = 9 \text{ points}$.
+\indent $g_{ODI}(y) = 3 \text{ points/wicket (Wickets 8--10)} \Rightarrow \sum_{y=8}^{10} 3 = 9 \text{ points}$.
 
 \vspace{1em}
 \noindent \textbf{Total ODI Wicket Capacity:} $27 + 24 + 9 = 60$ points.
@@ -199,84 +199,100 @@ F_w = \frac{u}{N} \cdot [W_{total} - W(w)]
 \end{equation}
 
 \subsubsection{Boundary Correctness}
-The symmetric design ensures $R_{used} = 200$ for all completed configurations. Let the total resource formula be:
+\indent The symmetric design ensures $R_{used} = 200$ for all completed configurations. Let the total resource formula be:
 \begin{equation}
 R_{used} = O(u) + W(w) + F_u + F_w
 \end{equation}
 
 \vspace{1em}
 \noindent \textbf{Case 1: All out before total overs played} \\
-Consider a T20 match where a team is all out ($w=10$) at 15.0 overs ($u=15, N=20$):
+\indent Consider a T20 match where a team is all out ($w=10$) at 15.0 overs ($u=15, N=20$):
 \begin{enumerate}
-    \item $O(15) = 54 \text{ (PP)} + (15-6) \times 4 \text{ (Mid)} = 54 + 36 = 90$ points.
-    \item $W(10) = 40$ points.
-    \item $F_u = \frac{10}{10} \times [160 - 90] = 1 \times 70 = 70$ points.
-    \item $F_w = \frac{15}{20} \times [40 - 40] = 0.75 \times 0 = 0$ points.
-    \item \textbf{Total:} $90 + 40 + 70 + 0 = 200$ points.
+\item $O(15) = 54 \text{ (PP)} + (15-6) \times 4 \text{ (Mid)} = 54 + 36 = 90$ points.
+\item $W(10) = 40$ points.
+\item $F_u = \frac{10}{10} \times [160 - 90] = 1 \times 70 = 70$ points.
+\item $F_w = \frac{15}{20} \times [40 - 40] = 0.75 \times 0 = 0$ points.
+\item \textbf{Total:} $90 + 40 + 70 + 0 = 200$ points.
 \end{enumerate}
 
 \noindent \textbf{Case 2: All overs played without getting all out} \\
-Consider a T20 match where a team plays 20.0 overs ($u=20, N=20$) and loses 4 wickets ($w=4$):
+\indent Consider a T20 match where a team plays 20.0 overs ($u=20, N=20$) and loses 4 wickets ($w=4$):
 \begin{enumerate}
-    \item $O(20) = 160$ points.
-    \item $W(4) = 18 \text{ (Top)} + 1 \times 4 \text{ (Mid)} = 18 + 4 = 22$ points.
-    \item $F_u = \frac{4}{10} \times [160 - 160] = 0$ points.
-    \item $F_w = \frac{20}{20} \times [40 - 22] = 1 \times 18 = 18$ points.
-    \item \textbf{Total:} $160 + 22 + 0 + 18 = 200$ points.
+\item $O(20) = 160$ points.
+\item $W(4) = 18 \text{ (Top)} + 1 \times 4 \text{ (Mid)} = 18 + 4 = 22$ points.
+\item $F_u = \frac{4}{10} \times [160 - 160] = 0$ points.
+\item $F_w = \frac{20}{20} \times [40 - 22] = 1 \times 18 = 18$ points.
+\item \textbf{Total:} $160 + 22 + 0 + 18 = 200$ points.
 \end{enumerate}
 
 \noindent \textbf{Case 3: All out and all overs played} \\
-Consider a T20 match where a team is all out on the final ball ($u=20, w=10, N=20$):
+\indent Consider a T20 match where a team is all out on the final ball ($u=20, w=10, N=20$):
 \begin{enumerate}
-    \item $O(20) = 160$ points.
-    \item $W(10) = 40$ points.
-    \item $F_u = 1 \times [0] = 0$ points.
-    \item $F_w = 1 \times [0] = 0$ points.
-    \item \textbf{Total:} $160 + 40 + 0 + 0 = 200$ points.
+\item $O(20) = 160$ points.
+\item $W(10) = 40$ points.
+\item $F_u = 1 \times [0] = 0$ points.
+\item $F_w = 1 \times [0] = 0$ points.
+\item \textbf{Total:} $160 + 40 + 0 + 0 = 200$ points.
 \end{enumerate}
 
 \subsubsection{Why need Forfeiting Resources?}
-In the physical reality of cricket, wickets constitute the ``risk capital'' of a batting team. When a wicket is lost, the team does not merely lose one batter; they lose a proportional share of their ability to exploit all subsequent overs. A team that is 100/0 after 10 overs has a vastly higher potential energy than a team at 100/5 after 10 overs. 
+\indent In the physical reality of cricket, wickets constitute the ``risk capital'' of a batting team. When a wicket is lost, the team does not merely lose one batter; they lose a proportional share of their ability to exploit all subsequent overs. A team that is 100/0 after 10 overs has a vastly higher potential energy than a team at 100/5 after 10 overs. 
 
-The forfeiture logic mathematically encodes this structural damage. It prevents the model from treating the resources as independent bins. Without forfeiture, a team finishing at 200/0 would have a different resource footprint than a team at 200/9, which would violate the law of the physical container. Forfeiture is the ``glue'' that enforces the conservation of total resource points, ensuring that every completed innings is measured against the same 200-point metric regardless of the tactical path taken.
+\indent The forfeiture logic mathematically encodes this structural damage. It prevents the model from treating the resources as independent bins. Without forfeiture, a team finishing at 200/0 would have a different resource footprint than a team at 200/9, which would violate the law of the physical container. Forfeiture is the ``glue'' that enforces the conservation of total resource points, ensuring that every completed innings is measured against the same 200-point metric regardless of the tactical path taken.
 
 \section{The Dynamic Stabilizer $D$}
 
 \subsection{Derivating $D$}
 
-The stabilizer $D$ is defined by the engineered offset formula:
+\indent The stabilizer $D$ is defined by the engineered offset formula:
 \begin{equation}
 D = \frac{P_{total} - R_{used,1}}{k}
 \end{equation}
-To determine the optimal value of the constant $k$, we evaluate a volatility scenario where Team A finishes with $R_{used,1} = 80$ (40\% of match) and $Score_A = 90$ runs. Team B has consumed $R_{used,2} = 72$ (which is a 10\% lower footprint). The raw ratio target would be $90 \times (72/80) = 81$ (a 9-run difference).
+
+\indent This specific formulation is selected to provide a dynamic, self-adjusting dampening effect that scales with the match's reduction. The numerator, $P_{total} - R_{used,1}$, represents the ``Residual Resource Gap''---the portion of the 200-point container that Team A was unable to utilize. By incorporating this gap into the stabilizer, the model ensures that the magnitude of $D$ is inversely proportional to the length of the first innings; the shorter the innings, the larger the stabilizer. The constant $k$ serves as the sensitivity governor, calibrating the exact degree of dampening required to maintain ratio stability without over-masking the actual performance. This structure effectively anchors the revised target to the intended scale of a full match, preventing the mathematical volatility that typically plagues raw resource ratios in hyper-truncated scenarios.
+
+\subsubsection{Sensitivity Analysis and Selection of $k$}
+
+\indent To determine the optimal value of the constant $k$, we evaluate an extremely high-volatility scenario where Team A finishes with $R_{used,1} = 20$ (representing a hyper-truncated 2-over burst) and $Score_A = 72$ runs. Team B has consumed $R_{used,2} = 10$ (exactly half of Team A's resource footprint). In this volatile snapshot, the raw ratio target would be $72 \times (10/20) = 36$ runs. This scenario tests the limits of the stabilizer $D$, as the lack of historical data for such short durations often leads to mathematical collapses in probabilistic models.
+
+\indent Team A: 72/0 (2.0) \\
+\indent Team B: 0/0 (1.0)
+
+\indent The following cases evaluate the impact of different $k$ values on the resulting Par Score:
 
 \begin{itemize}
-    \item \textbf{Case $k=2$ (Over-Stabilization)}: \\
-    $D = (200 - 80) / 2 = 60$. \\
-    $Par = 90 \times \frac{72 + 60}{80 + 60} = 90 \times \frac{132}{140} \approx 84.85 \rightarrow 85$. \\
-    Result: The target is pushed too high, failing to reward Team A's superior resource efficiency.
-    
-    \item \textbf{Case $k=8$ (Under-Stabilization)}: \\
-    $D = (200 - 80) / 8 = 15$. \\
-    $Par = 90 \times \frac{72 + 15}{80 + 15} = 90 \times \frac{87}{95} \approx 82.42 \rightarrow 83$. \\
-    Result: The target remains too close to the raw ratio, offering insufficient protection against short-match volatility.
-    
-    \item \textbf{Case $k=6$ (Moderate Stability)}: \\
-    $D = (200 - 80) / 6 = 20$. \\
-    $Par = 90 \times \frac{72 + 20}{80 + 20} = 90 \times \frac{92}{100} = 82.8 \rightarrow 83$. \\
-    Result: Still allows for excessive sensitivity in matches reduced below 10 overs.
-    
-    \item \textbf{Selection of $k=4$ (Near-Perfect Stability)}: \\
-    $D = (200 - 80) / 4 = 30$. \\
-    $Par = 90 \times \frac{72 + 30}{80 + 30} = 90 \times \frac{102}{110} \approx 83.45 \rightarrow 84$. \\
-    Result: This denominator provides the ``near-perfect'' linear dampening required to stabilize the ratio while preserving the mathematical hierarchy of resource utilization.
+\item \textbf{Case $k=2$}: \\
+$D = (200 - 20) / 2 = 90$. \\
+$Par = 72 \times \frac{10 + 90}{20 + 90} = 72 \times \frac{100}{110} \approx 65.4 \rightarrow 66$. \\
+Result: The target of 66 runs is excessively high, nearly matching Team A's total despite Team B having only half the resources. This over-stabilization effectively erases the resource ratio.
+
+\item \textbf{Case $k=4$}: \\
+$D = (200 - 20) / 4 = 45$. \\
+$Par = 72 \times \frac{10 + 45}{20 + 45} = 72 \times \frac{55}{65} \approx 60.9 \rightarrow 61$. \\
+Result: The target of 61 runs provides a balanced equilibrium. It recognizes the high scoring rate of Team A while providing necessary protection against the extreme volatility of a 20-point footprint.
+
+\item \textbf{Case $k=6$}: \\
+$D = (200 - 20) / 6 = 30$. \\
+$Par = 72 \times \frac{10 + 30}{20 + 30} = 72 \times \frac{40}{50} = 57.6 \rightarrow 58$. \\
+Result: A target of 58 runs begins to lean too heavily toward the raw resource ratio, offering diminishing protection as the match length decreases.
+
+\item \textbf{Case $k=8$}: \\
+$D = (200 - 20) / 8 = 22.5 \rightarrow 23$. \\
+$Par = 72 \times \frac{10 + 23}{20 + 23} = 72 \times \frac{33}{43} \approx 55.2 \rightarrow 56$. \\
+Result: At 56 runs, the stabilizer fails to sufficiently dampen the volatility. The target is diverted significantly from the stable region, risking an unfair advantage for the chasing team.
 \end{itemize}
+
+\subsubsection{Optimal Selection of $k$}
+
+\indent Based on the sensitivity analysis across extreme volatility thresholds, $k=4$ is selected as the primary constant for the Crux method's dynamic stabilizer.
+
+\indent The reasoning for this selection is rooted in the "Linearity-Volatility Trade-off." A lower $k$ (like 2) anchors the calculation too firmly to the 200-point ceiling, while a higher $k$ (like 8) allows the raw ratio to dominate even when the denominator is too small to be mathematically reliable. By setting $k=4$, the stabilizer $D$ acts as a perfect mathematical pivot, ensuring that the Par Score remains sensitive to actual performance while being physically bounded by the deterministic capacity of the sport's structure. This specific value ensures that as $R_{used}$ approaches zero, the target remains logically consistent with the intended intensity of the match.
 
 \subsection{Why need $D$?}
 
-The mathematical necessity for $D$ arises from the ``Small Denominator Problem.'' In the early stages of a match, the resource footprints ($R_{used,1}$ and $R_{used,2}$) are small. In a raw ratio $\frac{R_{used,2}}{R_{used,1}}$, the gradient of the function is extremely steep. A single run or a single dot ball in a 5-over match would cause a massive swing in the Par Score, leading to an inherently unstable and unfair result.
+\indent The mathematical necessity for $D$ arises from the ``Small Denominator Problem.'' In the early stages of a match, the resource footprints ($R_{used,1}$ and $R_{used,2}$) are small. In a raw ratio $\frac{R_{used,2}}{R_{used,1}}$, the gradient of the function is extremely steep. A single run or a single dot ball in a 5-over match would cause a massive swing in the Par Score, leading to an inherently unstable and unfair result.
 
-From a competitive standpoint, $D$ compensates for the ``Information Asymmetry'' inherent in target chasing. Team B always has the advantage of knowing exactly what they need to score, whereas Team A bats into an unknown future. As the match is shortened, this advantage is amplified. By adding $D$ to both the numerator and denominator, we move the calculation into a more stable linear region of the resource curve. It physically represents the ``shared uncertainty'' and anchored potential of the original 200-point container, ensuring that a 5-over match is still technically anchored to the intended scale of the sport.
+\indent From a competitive standpoint, $D$ compensates for the ``Information Asymmetry'' inherent in target chasing. Team B always has the advantage of knowing exactly what they need to score, whereas Team A bats into an unknown future. As the match is shortened, this advantage is amplified. By adding $D$ to both the numerator and denominator, we move the calculation into a more stable linear region of the resource curve. It physically represents the ``shared uncertainty'' and anchored potential of the original 200-point container, ensuring that a 5-over match is still technically anchored to the intended scale of the sport.
 
 \section{Handling Multiple Rain Interruptions}
 
@@ -286,7 +302,7 @@ N_{new} = N_{current} - Overs\_Washed\_Out
 \end{equation}
 
 \subsection{Why Dynamic $N$?}
-Physically, each rain interruption shrinks the vessel of the match. If $N$ remains static (e.g., always 20), the $Forfeited\_Overs$ formula would calculate losses against time that no longer exists in reality. This would create ``Phantom Resources''---mathematical points that exist in the calculation but cannot be exploited on the field. Dynamic $N$ ensures that at every snapshot, the 200-point capacity is mapped exactly to the \textit{current} physical reality of the match.
+\indent Physically, each rain interruption shrinks the vessel of the match. If $N$ remains static (e.g., always 20), the $Forfeited\_Overs$ formula would calculate losses against time that no longer exists in reality. This would create ``Phantom Resources''---mathematical points that exist in the calculation but cannot be exploited on the field. Dynamic $N$ ensures that at every snapshot, the 200-point capacity is mapped exactly to the \textit{current} physical reality of the match.
 
 \section{The Complete Resource Formula}
 
@@ -297,12 +313,65 @@ R_{used}(u, w, N) = \sum_{x=1}^{u} f(x) + \sum_{y=1}^{w} g(y) + \frac{w}{10} [O(
 \section{Future Scopes}
 
 \subsection{Average Run Rates}
-Replacing static weights with an ARR-Adaptive Engine derived from historical databases to ensure the model evolves with the increasing scoring rates of modern cricket.
+\indent Replacing static weights with an ARR-Adaptive Engine derived from historical databases to ensure the model evolves with the increasing scoring rates of modern cricket.
 
-\subsection{Machine Learning Based Predictions?}
-Integration of LSTM Networks to analyze ball-by-ball momentum and adjust the deterministic resource floor based on venue-specific conditions.
+\subsection{Machine Learning Based Predictions}
+\indent Integration of LSTM Networks to analyze ball-by-ball momentum and adjust the deterministic resource floor based on venue-specific conditions.
 
-\section{Benchmarking Against DLS on Real Match Data}
-\textit{Section placeholder for future match data snapshots.}
+\section{Match Simulations and Comparative Analysis}
+
+\indent To validate the Crux method, several hypothetical scenarios were simulated using the formal specification engine. These results demonstrate the model's behavior across standard rain delays and hyper-truncated interruptions.
+
+\subsection{The Hyper-Extreme Burst}
+Team A: 72/0 (2.0) \\
+Team B: 0/0 (1.0) \\
+
+\indent \textbf{Results:}
+\begin{itemize}
+  \item $R_{used,1}$: 58.0000 pts
+  \item $R_{used,2}$: 29.0000 pts
+  \item Stabilizer ($D$): 36 pts
+  \item \textbf{Par Score: 49.79 (Target: 50)}
+\end{itemize}
+\indent \textbf{Analysis:} Despite Team B having half the resources, the target is 50 (not 36) because the stabilizer $D$ accounts for the massive uncertainty and information advantage in a 1-over chase.
+
+\subsection{Standard T20 Rain Delay}
+Team A: 180/5 (20.0) \\
+Team B: 85/2 (10.0) \\
+
+\indent \textbf{Results:}
+\begin{itemize}
+  \item $R_{used,1}$: 200.0000 pts
+  \item $R_{used,2}$: 114.0000 pts
+  \item Stabilizer ($D$): 0 pts
+  \item \textbf{Par Score: 102.60 (Target: 103)}
+\end{itemize}
+\indent \textbf{Analysis:} With $R_{used,1}$ at the 200-point ceiling, the stabilizer is removed. Team B is behind the par score of 103, reflecting the weight of the "Death Overs" points they have yet to face.
+
+\subsection{ODI Late Match Interruption}
+Team A: 320/8 (50.0) \\
+Team B: 240/4 (40.0) \\
+
+\indent \textbf{Results:}
+\begin{itemize}
+  \item $R_{used,1}$: 200.0000 pts
+  \item $R_{used,2}$: 164.6000 pts
+  \item Stabilizer ($D$): 0 pts
+  \item \textbf{Par Score: 263.36 (Target: 264)}
+\end{itemize}
+\indent \textbf{Analysis:} The Par score of 264 indicates Team B is currently trailing, as the final 10 overs of an ODI represent a high-density resource phase that requires significant scoring potential.
+
+\subsection{The All-Out Penalty}
+Team A: 160/10 (18.4) \\
+Team B: 100/6 (15.0) \\
+
+\indent \textbf{Results:}
+\begin{itemize}
+  \item $R_{used,1}$: 200.0000 pts
+  \item $R_{used,2}$: 169.5000 pts
+  \item Stabilizer ($D$): 0 pts
+  \item \textbf{Par Score: 135.60 (Target: 136)}
+\end{itemize}
+\indent \textbf{Analysis:} Because Team A was all out, they are credited with consuming 200 points. Team B, having lost 6 wickets, has a high forfeiture cost, raising their required par score to 136.
 
 \end{document}

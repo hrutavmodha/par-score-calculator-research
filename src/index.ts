@@ -53,6 +53,38 @@ export class CruxCalculator {
   }
 
   /**
+   * Logs a detailed simulation result to the console.
+   */
+  public logSimulationResult(
+    name: string,
+    format: MatchFormat,
+    teamA: MatchState,
+    teamB: MatchState
+  ): void {
+    const rUsed1 = this.calculateResourceFootprint(format, teamA);
+    const rUsed2 = this.calculateResourceFootprint(format, teamB);
+    const stabilizerD = this.calculateStabilizer(rUsed1);
+    const { parScore, target } = this.calculateTarget(format, teamA, teamB);
+
+    console.log(`==================================================`);
+    console.log(`SCENARIO: ${name}`);
+    console.log(`FORMAT:   ${format}`);
+    console.log(`--------------------------------------------------`);
+    console.log(`Team A Stats: ${teamA.score}/${teamA.wickets} (${teamA.overs.toFixed(1)}/${teamA.scheduledOvers})`);
+    console.log(`Team B Stats: ${teamB.score}/${teamB.wickets} (${teamB.overs.toFixed(1)}/${teamB.scheduledOvers}) [At Interruption]`);
+    console.log(`--------------------------------------------------`);
+    console.log(`[Resources]`);
+    console.log(`R_used,1 (Team A): ${rUsed1.toFixed(4)} pts`);
+    console.log(`R_used,2 (Team B): ${rUsed2.toFixed(4)} pts`);
+    console.log(`Stabilizer (D):   ${stabilizerD} pts`);
+    console.log(`--------------------------------------------------`);
+    console.log(`[Result]`);
+    console.log(`Par Score:        ${parScore.toFixed(2)}`);
+    console.log(`Target:           ${target} runs`);
+    console.log(`==================================================\n`);
+  }
+
+  /**
    * Piecewise Step Function for Over Points O(u).
    */
   #calculateOverPoints(format: MatchFormat, overs: number): number {

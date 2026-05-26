@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "build": "concurrently \"tsc\" \"./compile.sh\""
+    "build": "./compile.sh"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,6 @@
   "homepage": "https://github.com/hrutavmodha/par-score-calculator-research#readme",
   "devDependencies": {
     "@types/node": "^25.9.1",
-    "concurrently": "^9.2.1",
     "typescript": "^6.0.3"
   }
 }
