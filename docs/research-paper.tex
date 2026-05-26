@@ -4,10 +4,9 @@
 \usepackage{amssymb}
 \usepackage{geometry}
 
-% Academic Paper Formatting
 \geometry{margin=1.25in}
 
-\title{\Huge \textbf{A Deterministic Crux --- Cross-Resource Utilization Index Model for Revised Targets in Limited-Overs Cricket}}
+\title{\Huge \textbf{Deterministic Mathematical Framework for Rain-Interrpted Limited-Overs Cricket Matches}}
 \author{\Large \textbf{Hrutav Modha}}
 \date{\today}
 
@@ -16,7 +15,7 @@
 \maketitle
 
 \begin{abstract}
-\indent This paper proposes a deterministic physical container model---the Crux --- Cross-Resource Utilization Index Method---that maps the discrete resource structure of a cricket innings into a fixed 200-point capacity matrix. This model accounts for the physical entanglement of overs and wickets through a cross-coupling forfeiture mechanism. By treating the innings as a finite vessel of potential, the Crux method provides a format-agnostic framework that is formally specified for both T20 and ODI matches, ensuring mathematical stability through a dynamic stabilizer $D$ and a mutable-$N$ design for multiple interruptions.
+\indent This paper introduces a deterministic mathematical framework, designed to map the resource structure of a cricket innings into a fixed 200-point capacity matrix. The model accounts for the interdependency of overs and wickets through a cross-coupling adjustment mechanism. By representing the innings as a finite resource capacity, the method provides a format-consistent methodology for both T20 and ODI matches, ensuring mathematical stability through a dynamic stabilizer $D$ and a mutable parameter $N$ to accommodate multiple interruptions.
 \end{abstract}
 
 \newpage
@@ -25,29 +24,29 @@
 
 \section{Prerequisite Theory}
 
-\subsection{Expectation of Knowledge from Readers}
+\subsection{Scope and Prerequisites}
 
 \indent Readers are expected to possess a firm and nuanced understanding of limited-overs cricket mechanics, specifically within the context of the T20 and ODI formats. This includes the fundamental interplay between consumed overs, wickets lost, fielding restrictions (Powerplays), and the physical constraints of a scheduled innings. The reader must understand that these two primary resources---overs and wickets---are not independent variables operating in isolation. A team cannot consume overs without exposing wickets to risk, and conversely, a team cannot preserve wickets without the unavoidable passage of time (overs). 
 
-\indent Mathematically, the reader should be familiar with the application of piecewise continuous step functions and discrete summation over bounded intervals. A working knowledge of the Duckworth-Lewis-Stern (DLS) method, at minimum at the conceptual and philosophical level, is assumed for the comparative sections of this paper. The reader should be prepared to analyze the innings not as a statistical distribution of probable outcomes, but as a finite ``physical container'' of potential energy.
+\indent Mathematically, the reader should be familiar with the application of piecewise continuous step functions and discrete summation over bounded intervals. A working knowledge of the Duckworth-Lewis-Stern (DLS) method, at minimum at the conceptual and philosophical level, is assumed for the comparative sections of this paper. The reader should be prepared to analyze the innings not as a statistical distribution of probable outcomes, but as a finite resource capacity.
 
 \subsection{Rain Delays in Cricket}
 
 \indent Cricket is a sport inherently bound by the dual constraints of time and weather. A full T20 innings is scheduled for 20 overs; a full ODI innings for 50 overs. When rain interrupts a match, the scheduled overs ($N$) are reduced either prospectively (before play resumes) or retrospectively (at the moment the innings is closed by the umpires). 
 
-\indent This physical truncation breaks the linear progression of the game in a manner that affects both teams asymmetrically. When rain interrupts the first innings, the team batting first loses scheduled overs that they may have exploited for aggressive scoring, particularly in the ``death'' phase where run rates are historically at their peak. When rain interrupts the second innings, the chasing team is either penalized (fewer overs to chase) or advantaged (target already set, but a small, high-intensity chase remains). These two scenarios require fundamentally different mathematical treatments, and the failure to separate them is the primary architectural flaw in naive target revision systems. 
+\indent This truncation breaks the linear progression of the game in a manner that affects both teams asymmetrically. When rain interrupts the first innings, the team batting first loses scheduled overs that they may have exploited for aggressive scoring, particularly in the ``death'' phase where run rates are historically at their peak. When rain interrupts the second innings, the chasing team is either penalized (fewer overs to chase) or advantaged (target already set, but a small, high-intensity chase remains). These two scenarios require fundamentally different mathematical treatments, and the failure to separate them is a methodological limitation in naive target revision systems. 
 
-\indent Multiple rain interruptions compound this asymmetry, creating a ``shrinking container'' effect. After each interruption, the physical capacity of the match decreases. Any formula that does not dynamically track the current scheduled maximum ($N$) will operate on a flawed mathematical baseline, as overs that have been washed out must be strictly deducted from the calculation to preserve the integrity of the resource ratio.
+\indent Multiple rain interruptions compound this asymmetry, creating a diminishing resource capacity. After each interruption, the capacity of the match decreases. Any formula that does not dynamically track the current scheduled maximum ($N$) will operate on a flawed mathematical baseline, as overs that have been washed out must be strictly deducted from the calculation to preserve the integrity of the resource ratio.
 
-\subsection{The Need of Par Score}
+\subsection{The Role of the Par Score}
 
 \indent Because a truncated match features physically asymmetric resources, comparing raw run totals is mathematically invalid and structurally unfair. A team that bats 15 overs on a full-length pitch is not comparable to a team that bats 15 overs knowing the innings will close at exactly that point. The knowledge of the endpoint changes the ``resource deployment strategy'' of the batting side.
 
 \indent A Par Score is the minimum score the chasing team must reach at any snapshot in time to be mathematically tied with the first team, rigorously accounting for overs consumed and wickets lost at the time of interruption. It serves as the ``equilibrium point'' that balances the resource consumption between the two competing innings, ensuring that the disadvantage of an interruption is shared as fairly as possible according to the deterministic laws of the sport's structure.
 
-\section{Introduction to Method}
+\section{Methodology}
 
-\subsection{The Master Formula}
+\subsection{The Governing Equation}
 
 \indent The Par Score at any moment of interruption is calculated using the following primary governing equation:
 
@@ -59,13 +58,13 @@ Par = Score_A \times \left( \frac{R_{used,2} + D}{R_{used,1} + D} \right)
 
 \subsection{Description, Definitions, and Mathematical Statements}
 
-\indent The Crux method replaces historical statistical probability with a deterministic physical container model. The key definitions required for the implementation of this method are as follows:
+\indent The methodology replaces historical statistical probability with a deterministic resource model. The key definitions required for the implementation of this method are as follows:
 
 \begin{itemize}
 \item \textbf{$R_{used,1}$}: The exact mathematical footprint consumed by Team A. For a completed, uninterrupted first innings, this always equals $P_{total} = 200$, making the stabilizer $D = 0$ and simplifying the Par formula to a direct resource ratio.
 \item \textbf{$R_{used,2}$}: The exact mathematical footprint consumed by Team B at the moment of interruption. This includes both the ``active'' consumption (overs bowled and wickets lost) and the ``passive'' forfeiture (the destruction of future potential capacity caused by the current state of the match).
 \item \textbf{$D$}: The dynamic stabilizer, an engineered offset designed to prevent the Par ratio from producing an asymptotic result when Team A's innings was itself interrupted and their $R_{used,1}$ is significantly below the 200-point ceiling.
-\item \textbf{$N$}: The current scheduled maximum overs for the match. Unlike traditional methods that treat this as a constant, the Crux method treats $N$ as a mutable state variable that must be updated at every snapshot of the match.
+\item \textbf{$N$}: The current scheduled maximum overs for the match. Unlike traditional methods that treat this as a constant, the proposed method treats $N$ as a mutable state variable that must be updated at every snapshot of the match.
 \end{itemize}
 
 \indent Unlike exponential probability curves fitted to historical averages, this approach bounds the mathematical output within strict physical capacities defined by the dimensions of the sport itself.
@@ -98,11 +97,11 @@ Z(u, w) = Z_0(w) \left[ 1 - e^{-b(w) \cdot u} \right]
 
 \indent The philosophical core of DLS is probability: it asks, given a historical distribution of match outcomes, what is the expected run-scoring potential of a team in this state? This creates structural limitations including regression to the historical mean and the asymptotic ceiling problem.
 
-\section{The Crux — Cross-Resource Utilization Index Method}
+\section{The Method}
 
 \subsection{Establishing Total Resource Points}
 
-\indent The fundamental axiom of the Crux method is that a cricket innings is a finite container of potential, represented by a fixed 200-point capacity matrix ($P_{total}$). However, the allocation of these points between the two primary dimensions---overs and wickets---varies fundamentally between formats:
+\indent The fundamental axiom of our method is that a cricket innings is a finite container of potential, represented by a fixed 200-point capacity matrix ($P_{total}$). However, the allocation of these points between the two primary dimensions---overs and wickets---varies fundamentally between formats:
 
 \indent In \textbf{T20I} cricket, the 200 points are split in an \textbf{80:20 ratio} (160 over-points, 40 wicket-points).
 In \textbf{ODI} cricket, the 200 points are split in a \textbf{70:30 ratio} (140 over-points, 60 wicket-points).
@@ -284,7 +283,7 @@ Result: At 56 runs, the stabilizer fails to sufficiently dampen the volatility. 
 
 \subsubsection{Optimal Selection of $k$}
 
-\indent Based on the sensitivity analysis across extreme volatility thresholds, $k=4$ is selected as the primary constant for the Crux method's dynamic stabilizer.
+\indent Based on the sensitivity analysis across extreme volatility thresholds, $k=4$ is selected as the primary constant for this method's dynamic stabilizer.
 
 \indent The reasoning for this selection is rooted in the "Linearity-Volatility Trade-off." A lower $k$ (like 2) anchors the calculation too firmly to the 200-point ceiling, while a higher $k$ (like 8) allows the raw ratio to dominate even when the denominator is too small to be mathematically reliable. By setting $k=4$, the stabilizer $D$ acts as a perfect mathematical pivot, ensuring that the Par Score remains sensitive to actual performance while being physically bounded by the deterministic capacity of the sport's structure. This specific value ensures that as $R_{used}$ approaches zero, the target remains logically consistent with the intended intensity of the match.
 
@@ -320,7 +319,7 @@ R_{used}(u, w, N) = \sum_{x=1}^{u} f(x) + \sum_{y=1}^{w} g(y) + \frac{w}{10} [O(
 
 \section{Match Simulations and Comparative Analysis}
 
-\indent To validate the Crux method, several hypothetical scenarios were simulated using the formal specification engine. These results demonstrate the model's behavior across standard rain delays and hyper-truncated interruptions.
+\indent To validate my method, several hypothetical scenarios were simulated using the formal specification. These results demonstrate the model's behavior across standard rain delays and hyper-truncated interruptions.
 
 \subsection{The Hyper-Extreme Burst}
 Team A: 72/0 (2.0) \\
