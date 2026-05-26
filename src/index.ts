@@ -11,7 +11,9 @@ export class CruxCalculator {
    * Calculates the total resource footprint consumed by a team.
    */
   public calculateResourceFootprint(format: MatchFormat, state: MatchState): number {
-    const { overs, wickets, scheduledOvers } = state;
+    const overs = this.#toDecimalOvers(state.overs);
+    const scheduledOvers = this.#toDecimalOvers(state.scheduledOvers);
+    const { wickets } = state;
     
     const overPointsUsed = this.#calculateOverPoints(format, overs);
     const totalOverCapacity = this.#calculateOverPoints(format, scheduledOvers);
@@ -70,8 +72,8 @@ export class CruxCalculator {
     console.log(`SCENARIO: ${name}`);
     console.log(`FORMAT:   ${format}`);
     console.log(`--------------------------------------------------`);
-    console.log(`Team A Stats: ${teamA.score}/${teamA.wickets} (${teamA.overs.toFixed(1)}/${teamA.scheduledOvers})`);
-    console.log(`Team B Stats: ${teamB.score}/${teamB.wickets} (${teamB.overs.toFixed(1)}/${teamB.scheduledOvers}) [At Interruption]`);
+    console.log(`Team A Stats: ${teamA.score}/${teamA.wickets} (${teamA.overs} / ${teamA.scheduledOvers})`);
+    console.log(`Team B Stats: ${teamB.score}/${teamB.wickets} (${teamB.overs} / ${teamB.scheduledOvers}) [At Interruption]`);
     console.log(`--------------------------------------------------`);
     console.log(`[Resources]`);
     console.log(`R_used,1 (Team A): ${rUsed1.toFixed(4)} pts`);
@@ -82,6 +84,20 @@ export class CruxCalculator {
     console.log(`Par Score:        ${parScore.toFixed(2)}`);
     console.log(`Target:           ${target} runs`);
     console.log(`==================================================\n`);
+  }
+
+  /**
+   * Converts cricket-style overs (e.g. 18.4) to 10-base decimals (e.g. 18.6667).
+   */
+  #toDecimalOvers(overs: number): number {
+    const fullOvers = Math.floor(overs);
+    const balls = Math.round((overs - fullOvers) * 10);
+    
+    if (balls >= 6) {
+      throw new Error(`Invalid overs format: ${overs}. Balls component cannot be 6 or more.`);
+    }
+    
+    return fullOvers + balls / 6;
   }
 
   /**
