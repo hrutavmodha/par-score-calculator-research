@@ -470,7 +470,17 @@ R_{used}(u, w, N) = \sum_{x=1}^{u} f(x) + \sum_{y=1}^{w} g(y) + \frac{w}{10} [O(
 \begin{align*}
 & \text{Revised Target} = \text{Score}_A \times \left( \frac{R_{available,2}}{R_{used,1}} \right) + 1
 \end{align*}
-\indent Since $R_{used,1} = 200$, and $R_{available,2} = 200$ for a fresh chase of any length, the target remains $\text{Score}_A + 1$ unless the match is shortened to a length where the "intensity adjustment" (Section 10) is required.
+\indent Here, $R_{available,2}$ represents the total potential of the reduced vessel (Over Points + Wicket Points), mapped against the original 200-point container. As the available overs decrease, $O(N)$ for Team B shrinks, reducing $R_{available,2}$ and leading to a proportionally lower target that reflects the diminished time resource.
+
+\indent \textbf{Example Application:} \\
+Team A finishes a full T20 innings at 180/6 (20.0). During the break, rain reduces the match to a 10-over chase. \\
+Team A: 180/6 (20.0) \\
+Team B: Revised target for 10.0 overs.
+\begin{align*}
+& R_{used,1} = 200 \text{ pts (Completed Innings)} \\
+& R_{available,2} = O(10) + W_{total} = (54 + 16) + 40 = 110 \text{ pts} \\
+& \text{Revised Target} = 180 \times \left( \frac{110}{200} \right) + 1 = 99 + 1 = 100 \text{ runs}
+\end{align*}
 
 \subsubsection{Mid-Chase Truncation and Retrospective Termination}
 \indent \textbf{Description:} Team B is already batting when rain reduces overs or ends the match. \\
@@ -478,6 +488,21 @@ R_{used}(u, w, N) = \sum_{x=1}^{u} f(x) + \sum_{y=1}^{w} g(y) + \frac{w}{10} [O(
 \begin{align*}
 & Par = Score_A \times \left( \frac{R_{used,2} + D}{R_{used,1} + D} \right)
 \end{align*}
+
+\indent \textbf{Example Application:} \\
+Team A scores 240/10 (48.4) in an ODI. Team B is at 120/1 (22.0) when a thunderstorm ends the match. \\
+Team A: 240/10 (48.4) \\
+Team B: 120/1 (22.0) \\
+\begin{align*}
+& R_{used,1} = 200 \text{ pts (All Out)} \\
+& O(22) = 30 + (22-10) \times 2 = 54 \text{ pts} \\
+& W(1) = 9 \text{ pts} \\
+& F_u = (1/10) \times [140 - 54] = 8.6 \text{ pts} \\
+& F_w = (22/50) \times [60 - 9] = 22.44 \text{ pts} \\
+& R_{used,2} = 54 + 9 + 8.6 + 22.44 = 94.04 \text{ pts} \\
+& Par = 240 \times \left( \frac{94.04}{200} \right) = 112.85 \rightarrow 113 \text{ runs}
+\end{align*}
+\indent \textit{Verdict: Team B (120) is ahead of the Par Score (113) and wins.}
 
 \subsection{Category B: Truncated First Innings}
 
@@ -489,6 +514,20 @@ R_{used}(u, w, N) = \sum_{x=1}^{u} f(x) + \sum_{y=1}^{w} g(y) + \frac{w}{10} [O(
 \end{align*}
 \indent Here, $R_{available,2}$ is the 200-point capacity of Team B's fresh chase vessel, while $R_{used,1}$ is the footprint of Team A's truncated innings.
 
+\indent \textbf{Example Application:} \\
+In an ODI, Team A is 165/3 (35.0/50.0) when rain washes out the rest of their innings. Team B is set a target for a 35-over chase. \\
+Team A: 165/3 (35.0) \\
+Team B: Revised target for 35.0 overs.
+\begin{align*}
+& O(35) = 30 + (35-10) \times 2 = 80 \text{ pts} \\
+& W(3) = 27 \text{ pts} \\
+& F_u = (3/10) \times [140 - 80] = 18 \text{ pts} \\
+& F_w = (35/50) \times [60 - 27] = 23.1 \text{ pts} \\
+& R_{used,1} = 80 + 27 + 18 + 23.1 = 148.1 \text{ pts} \\
+& R_{available,2} = 200 \text{ pts (Fresh Chase)} \\
+& \text{Revised Target} = 165 \times \left( \frac{200}{148.1} \right) + 1 = 222.8 + 1 = 223 \text{ runs}
+\end{align*}
+
 \subsubsection{Mid-Play Reduction (The "Accordion" Match)}
 \indent \textbf{Description:} Team A's overs are reduced mid-innings; they resume and finish the reduced innings. \\
 \indent \textbf{Logic:} Team A is credited with $R_{used,1}$ calculated against the *original* $N$, including forfeiture for overs lost. Team B's target is then set using the Ratio of Totals.
@@ -496,9 +535,63 @@ R_{used}(u, w, N) = \sum_{x=1}^{u} f(x) + \sum_{y=1}^{w} g(y) + \frac{w}{10} [O(
 & \text{Revised Target} = Score_A \times \left( \frac{R_{available,2}}{R_{used,1}} \right) + 1
 \end{align*}
 
+\indent \textbf{Example Application:} \\
+Team A is 80/1 after 15.0 overs of a 50-over match. Rain reduces the match to 30 overs per side. Team A resumes and finishes their 30 overs at 200/5. \\
+Team A: 200/5 (30.0) \\
+Team B: Revised target for 30.0 overs.
+\begin{align*}
+& O(30) = 30 + (30-10) \times 2 = 70 \text{ pts} \\
+& W(5) = 27 + (5-3) \times 6 = 39 \text{ pts} \\
+& F_u = (5/10) \times [140 - 70] = 35 \text{ pts} \\
+& F_w = (30/50) \times [60 - 39] = 12.6 \text{ pts} \\
+& R_{used,1} = 70 + 39 + 35 + 12.6 = 156.6 \text{ pts} \\
+& R_{available,2} = 200 \text{ pts (Fresh Chase)} \\
+& \text{Revised Target} = 200 \times \left( \frac{200}{156.6} \right) + 1 = 255.4 + 1 = 256 \text{ runs}
+\end{align*}
+
+\section{Testing Formula on Real-World Data}
+
+\indent To validate the robustness of the deterministic framework, the model was tested against historical match data, most notably the high-volatility scenarios that exposed the limitations of previous target revision systems.
+
+\subsection{The 1992 World Cup Semi-Final Anomaly}
+\indent The 1992 semi-final between South Africa and England is the most infamous failure in cricket's target revision history. Under the "Most Productive Over" (MPO) method, South Africa's target was revised from 22 runs off 13 balls to 21 runs off 1 ball after a short rain delay. We apply the deterministic framework to this snapshot to evaluate the fairness of the outcome.
+
+\vspace{1em}
+\noindent \textbf{Input Data:} \\
+Team A (England): 252/6 (45.0/50.0) \\
+Team B (South Africa): 231/6 (42.5/45.0)
+
+\indent \textbf{Step 1: England's Resource Footprint ($R_{used,1}$)}
+\begin{align*}
+& O(45) = 30 + 60 + 25 = 115 \text{ pts} \\
+& W(6) = 27 + 18 = 45 \text{ pts} \\
+& F_u = 0.6 \times (140 - 115) = 15 \text{ pts} \\
+& F_w = (45/50) \times (60 - 45) = 13.5 \text{ pts} \\
+& R_{used,1} = 115 + 45 + 15 + 13.5 = 188.5 \text{ pts}
+\end{align*}
+
+\indent \textbf{Step 2: South Africa's Resource Footprint ($R_{used,2}$)}
+\begin{align*}
+& O(42.5) = 30 + 60 + 12.5 = 102.5 \text{ pts} \\
+& W(6) = 45 \text{ pts} \\
+& F_u = 0.6 \times (115 - 102.5) = 7.5 \text{ pts} \\
+& F_w = (42.5/45) \times (60 - 45) = 14.1667 \text{ pts} \\
+& R_{used,2} = 102.5 + 45 + 7.5 + 14.1667 = 169.1667 \text{ pts}
+\end{align*}
+
+\indent \textbf{Step 3: Par Score Derivation}
+\begin{align*}
+& D = (200 - 188.5) / 4 = 2.875 \text{ pts} \\
+& Par = 252 \times \frac{169.1667 + 2.875}{188.5 + 2.875} \\
+& Par = 252 \times 0.898977 = 226.54 \\
+& \text{Par Score = 227 (South Africa wins)}
+\end{align*}
+
+\indent \textbf{Analysis:} At the moment the match was stopped, South Africa (231/6) was 4 runs ahead of the Par Score (227). Unlike the MPO method, which effectively deleted South Africa's most productive batting overs, the deterministic model recognizes their strong resource position and awards them the victory based on a balanced transfer of value.
+
 \section{Match Simulations and Comparative Analysis}
 
-\indent To validate the model's behavior across standard rain delays and hyper-truncated interruptions, several hypothetical scenarios were simulated using the formal specification. These results demonstrate the consistency of the deterministic framework under various intensities.
+\indent To further validate the model's behavior across standard rain delays and hyper-truncated interruptions, several hypothetical scenarios were simulated using the formal specification. These results demonstrate the consistency of the framework under various intensities.
 
 \subsection{The Hyper-Extreme Burst}
 
@@ -564,46 +657,6 @@ Team B: 100/6 (15.0) \\
 \end{align*}
 
 \indent \textbf{Analysis:} Because Team A was all out, they are credited with consuming 200 points. Team B, having lost 6 wickets, has a high forfeiture cost, raising their required par score to 136.
-
-\section{Testing Formula on Real-World Data}
-
-\indent To validate the robustness of the deterministic framework, the model was tested against historical match data, most notably the high-volatility scenarios that exposed the limitations of previous target revision systems.
-
-\subsection{The 1992 World Cup Semi-Final Anomaly}
-\indent The 1992 semi-final between South Africa and England is the most infamous failure in cricket's target revision history. Under the "Most Productive Over" (MPO) method, South Africa's target was revised from 22 runs off 13 balls to 21 runs off 1 ball after a short rain delay. We apply the deterministic framework to this snapshot to evaluate the fairness of the outcome.
-
-\vspace{1em}
-\noindent \textbf{Input Data:} \\
-Team A (England): 252/6 (45.0/50.0) \\
-Team B (South Africa): 231/6 (42.5/45.0)
-
-\indent \textbf{Step 1: England's Resource Footprint ($R_{used,1}$)}
-\begin{align*}
-& O(45) = 30 + 60 + 25 = 115 \text{ pts} \\
-& W(6) = 27 + 18 = 45 \text{ pts} \\
-& F_u = 0.6 \times (140 - 115) = 15 \text{ pts} \\
-& F_w = (45/50) \times (60 - 45) = 13.5 \text{ pts} \\
-& R_{used,1} = 115 + 45 + 15 + 13.5 = 188.5 \text{ pts}
-\end{align*}
-
-\indent \textbf{Step 2: South Africa's Resource Footprint ($R_{used,2}$)}
-\begin{align*}
-& O(42.5) = 30 + 60 + 12.5 = 102.5 \text{ pts} \\
-& W(6) = 45 \text{ pts} \\
-& F_u = 0.6 \times (115 - 102.5) = 7.5 \text{ pts} \\
-& F_w = (42.5/45) \times (60 - 45) = 14.1667 \text{ pts} \\
-& R_{used,2} = 102.5 + 45 + 7.5 + 14.1667 = 169.1667 \text{ pts}
-\end{align*}
-
-\indent \textbf{Step 3: Par Score Derivation}
-\begin{align*}
-& D = (200 - 188.5) / 4 = 2.875 \text{ pts} \\
-& Par = 252 \times \frac{169.1667 + 2.875}{188.5 + 2.875} \\
-& Par = 252 \times 0.898977 = 226.54 \\
-& \text{Par Score = 227 (South Africa wins)}
-\end{align*}
-
-\indent \textbf{Analysis:} At the moment the match was stopped, South Africa (231/6) was 4 runs ahead of the Par Score (227). Unlike the MPO method, which effectively deleted South Africa's most productive batting overs, the deterministic model recognizes their strong resource position and awards them the victory based on a balanced transfer of value.
 
 \section{Future Scopes}
 
