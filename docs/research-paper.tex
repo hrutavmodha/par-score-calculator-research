@@ -1,10 +1,12 @@
-\documentclass[12pt, letterpaper]{article}
+\documentclass[12pt, letterpaper, fleqn]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{geometry}
 
 \geometry{margin=1.25in}
+\setlength{\mathindent}{0pt}
+
 
 \title{\Huge \textbf{Deterministic Mathematical Framework for Rain-Interrpted Limited-Overs Cricket Matches}}
 \author{\Large \textbf{Hrutav Modha}}
@@ -121,18 +123,129 @@ Total Wicket Capacity $W_{total}$ & 40 & 20\% & 60 & 30\% \\
 \end{tabular}
 \end{center}
 
+\subsubsection{Splitting Resource Ratios for T20}
+
+\indent To analyze the sensitivity of the model to the ratio of over-capacity ($O_{total}$) to wicket-capacity ($W_{total}$), we evaluate a snapshot of a T20 match where Team A has set a target, and Team B is deep into the middle overs, having preserved most of their wickets to prepare for a death-overs charge. \\
+Team A: 160/5 (20.0) \\
+Team B: 105/1 (15.0) \\
+
+\indent In this scenario ($N=20, u=15.0, w=1$), based on the T20 distribution coefficients, the consumed components are $O(15) = 90$ (which is $0.5625$ of $O_{total}$) and $W(1) = 6$ (which is $0.15$ of $W_{total}$). The general resource formula $R_{used}$ is calculated as follows:
+
+\begin{align*}
+& R_{used} = O(u) + W(w) + \frac{w}{10} [O(N) - O(u)] + \frac{u}{N} [W_{total} - W(w)] \\
+& R_{used} = 0.5625 O_{total} + 0.15 W_{total} + \frac{1}{10} [O_{total} (1 - 0.5625)] + \frac{15}{20} [W_{total} (1 - 0.15)] \\
+& R_{used} = 0.5625 O_{total} + 0.15 W_{total} + 0.1 [0.4375 O_{total}] + 0.75 [0.85 W_{total}] \\
+& R_{used} = (0.5625 + 0.04375) O_{total} + (0.15 + 0.6375) W_{total} \\
+& R_{used} = 0.60625 O_{total} + 0.7875 W_{total}
+\end{align*}
+
+\indent We now evaluate $R_{used}$ across the distribution spectrum where $O_{total} + W_{total} = 200$:
+
+\begin{itemize}
+    \item \textbf{90:10 Ratio ($O_{total}=180, W_{total}=20$):} 
+    \begin{align*}
+    & R_{used} = 0.60625(180) + 0.7875(20) \\
+    & R_{used} = 109.125 + 15.75 = 124.875
+    \end{align*}
+    
+    \item \textbf{80:20 Ratio ($O_{total}=160, W_{total}=40$):} 
+    \begin{align*}
+    & R_{used} = 0.60625(160) + 0.7875(40) \\
+    & R_{used} = 97.000 + 31.50 = 128.500
+    \end{align*}
+    
+    \item \textbf{70:30 Ratio ($O_{total}=140, W_{total}=60$):} 
+    \begin{align*}
+    & R_{used} = 0.60625(140) + 0.7875(60) \\
+    & R_{used} = 84.875 + 47.25 = 132.125
+    \end{align*}
+    
+    \item \textbf{60:40 Ratio ($O_{total}=120, W_{total}=80$):} 
+    \begin{align*}
+    & R_{used} = 0.60625(120) + 0.7875(80) \\
+    & R_{used} = 72.750 + 63.00 = 135.750
+    \end{align*}
+    
+    \item \textbf{50:50 Ratio ($O_{total}=100, W_{total}=100$):} 
+    \begin{align*}
+    & R_{used} = 0.60625(100) + 0.7875(100) \\
+    & R_{used} = 60.625 + 78.75 = 139.375
+    \end{align*}
+\end{itemize}
+
+\subsubsection{Splitting Resource Ratios for ODI}
+
+\indent To analyze the sensitivity of the model for the 50-over format, we evaluate an equivalent physical state in an ODI match where Team A has set a target, and Team B is entering the final ten-over phase, having lost only a single wicket and maintaining a steady accumulation rate. \\
+Team A: 300/5 (50.0) \\
+Team B: 240/1 (40.0) \\
+
+\indent In this scenario ($N=50, u=40.0, w=1$), based on the ODI distribution coefficients, the consumed components are $O(40) = 90$ (which is $0.6428$ of $O_{total}$) and $W(1) = 9$ (which is $0.15$ of $W_{total}$). The general resource formula $R_{used}$ is calculated as follows:
+
+\begin{align*}
+& R_{used} = O(u) + W(w) + \frac{w}{10} [O(N) - O(u)] + \frac{u}{N} [W_{total} - W(w)] \\
+& R_{used} = 0.6428 O_{total} + 0.15 W_{total} + \frac{1}{10} [O_{total} (1 - 0.6428)] + \frac{40}{50} [W_{total} (1 - 0.15)] \\
+& R_{used} = 0.6428 O_{total} + 0.15 W_{total} + 0.1 [0.3572 O_{total}] + 0.8 [0.85 W_{total}] \\
+& R_{used} = (0.6428 + 0.03572) O_{total} + (0.15 + 0.68) W_{total} \\
+& R_{used} = 0.67852 O_{total} + 0.83 W_{total}
+\end{align*}
+
+\indent Evaluating $R_{used}$ across the distribution spectrum ($O_{total} + W_{total} = 200$):
+
+\begin{itemize}
+    \item \textbf{90:10 Ratio ($O_{total}=180, W_{total}=20$):} 
+    \begin{align*}
+    & R_{used} = 0.67852(180) + 0.83(20) \\
+    & R_{used} = 122.1336 + 16.6 = 138.7336
+    \end{align*}
+    
+    \item \textbf{80:20 Ratio ($O_{total}=160, W_{total}=40$):} 
+    \begin{align*}
+    & R_{used} = 0.67852(160) + 0.83(40) \\
+    & R_{used} = 108.5632 + 33.2 = 141.7632
+    \end{align*}
+    
+    \item \textbf{70:30 Ratio ($O_{total}=140, W_{total}=60$):} 
+    \begin{align*}
+    & R_{used} = 0.67852(140) + 0.83(60) \\
+    & R_{used} = 94.9928 + 49.8 = 144.7928
+    \end{align*}
+    
+    \item \textbf{60:40 Ratio ($O_{total}=120, W_{total}=80$):} 
+    \begin{align*}
+    & R_{used} = 0.67852(120) + 0.83(80) \\
+    & R_{used} = 81.4224 + 66.4 = 147.8224
+    \end{align*}
+    
+    \item \textbf{50:50 Ratio ($O_{total}=100, W_{total}=100$):} 
+    \begin{align*}
+    & R_{used} = 0.67852(100) + 0.83(100) \\
+    & R_{used} = 67.852 + 83.0 = 150.852
+    \end{align*}
+\end{itemize}
+
+\indent The ODI analysis reveals a higher baseline resource footprint compared to T20 for the same percentage of physical completion. This is a direct consequence of the 70:30 allocation, which places greater mathematical significance on the remaining wicket-survival potential, ensuring that the Par Score remains robust against the extended strategic horizon of the 50-over format.
+
 \subsection{Distributing Resource Points Across Over Phases in T20}
 
 \indent The accumulated over-points $O(u)$ for T20 are defined by discrete summation:
 
 \subsubsection{Powerplay - Overs 1 to 6}
-\indent $f_{T20}(x) = 9 \text{ points/over} \Rightarrow \sum_{x=1}^{6} 9 = 54 \text{ points}$.
+\begin{align*}
+& f_{T20}(x) = 9 \text{ points/over} \\
+& \sum_{x=1}^{6} 9 = 54 \text{ points}
+\end{align*}
 
 \subsubsection{Middle Overs - Overs 7 to 15}
-\indent $f_{T20}(x) = 4 \text{ points/over} \Rightarrow \sum_{x=7}^{15} 4 = 36 \text{ points}$.
+\begin{align*}
+& f_{T20}(x) = 4 \text{ points/over} \\
+& \sum_{x=7}^{15} 4 = 36 \text{ points}
+\end{align*}
 
 \subsubsection{Death Overs - Overs 16 to 20}
-\indent $f_{T20}(x) = 14 \text{ points/over} \Rightarrow \sum_{x=16}^{20} 14 = 70 \text{ points}$.
+\begin{align*}
+& f_{T20}(x) = 14 \text{ points/over} \\
+& \sum_{x=16}^{20} 14 = 70 \text{ points}
+\end{align*}
 
 \vspace{1em}
 \noindent \textbf{Total T20 Over Capacity:} $54 + 36 + 70 = 160$ points.
@@ -142,13 +255,22 @@ Total Wicket Capacity $W_{total}$ & 40 & 20\% & 60 & 30\% \\
 \indent The accumulated over-points $O(u)$ for ODI are defined by:
 
 \subsubsection{Powerplay - Overs 1 to 10}
-\indent $f_{ODI}(x) = 3 \text{ points/over} \Rightarrow \sum_{x=1}^{10} 3 = 30 \text{ points}$.
+\begin{align*}
+& f_{ODI}(x) = 3 \text{ points/over} \\
+& \sum_{x=1}^{10} 3 = 30 \text{ points}
+\end{align*}
 
 \subsubsection{Middle Overs - Overs 11 to 40}
-\indent $f_{ODI}(x) = 2 \text{ points/over} \Rightarrow \sum_{x=11}^{40} 2 = 60 \text{ points}$.
+\begin{align*}
+& f_{ODI}(x) = 2 \text{ points/over} \\
+& \sum_{x=11}^{40} 2 = 60 \text{ points}
+\end{align*}
 
 \subsubsection{Death Overs - Overs 41 to 50}
-\indent $f_{ODI}(x) = 5 \text{ points/over} \Rightarrow \sum_{x=41}^{50} 5 = 50 \text{ points}$.
+\begin{align*}
+& f_{ODI}(x) = 5 \text{ points/over} \\
+& \sum_{x=41}^{50} 5 = 50 \text{ points}
+\end{align*}
 
 \vspace{1em}
 \noindent \textbf{Total ODI Over Capacity:} $30 + 60 + 50 = 140$ points.
@@ -158,13 +280,22 @@ Total Wicket Capacity $W_{total}$ & 40 & 20\% & 60 & 30\% \\
 \indent Wicket points $W(w)$ for T20 are defined by:
 
 \subsubsection{Top Order}
-\indent $g_{T20}(y) = 6 \text{ points/wicket (Wickets 1--3)} \Rightarrow \sum_{y=1}^{3} 6 = 18 \text{ points}$.
+\begin{align*}
+& g_{T20}(y) = 6 \text{ points/wicket (Wickets 1--3)} \\
+& \sum_{y=1}^{3} 6 = 18 \text{ points}
+\end{align*}
 
 \subsubsection{Middle Order}
-\indent $g_{T20}(y) = 4 \text{ points/wicket (Wickets 4--7)} \Rightarrow \sum_{y=4}^{7} 4 = 16 \text{ points}$.
+\begin{align*}
+& g_{T20}(y) = 4 \text{ points/wicket (Wickets 4--7)} \\
+& \sum_{y=4}^{7} 4 = 16 \text{ points}
+\end{align*}
 
 \subsubsection{Tailenders}
-\indent $g_{T20}(y) = 2 \text{ points/wicket (Wickets 8--10)} \Rightarrow \sum_{y=8}^{10} 2 = 6 \text{ points}$.
+\begin{align*}
+& g_{T20}(y) = 2 \text{ points/wicket (Wickets 8--10)} \\
+& \sum_{y=8}^{10} 2 = 6 \text{ points}
+\end{align*}
 
 \vspace{1em}
 \noindent \textbf{Total T20 Wicket Capacity:} $18 + 16 + 6 = 40$ points.
@@ -174,13 +305,22 @@ Total Wicket Capacity $W_{total}$ & 40 & 20\% & 60 & 30\% \\
 \indent Wicket points $W(w)$ for ODI are defined by:
 
 \subsubsection{Top Order}
-\indent $g_{ODI}(y) = 9 \text{ points/wicket (Wickets 1--3)} \Rightarrow \sum_{y=1}^{3} 9 = 27 \text{ points}$.
+\begin{align*}
+& g_{ODI}(y) = 9 \text{ points/wicket (Wickets 1--3)} \\
+& \sum_{y=1}^{3} 9 = 27 \text{ points}
+\end{align*}
 
 \subsubsection{Middle Order}
-\indent $g_{ODI}(y) = 6 \text{ points/wicket (Wickets 4--7)} \Rightarrow \sum_{y=4}^{7} 6 = 24 \text{ points}$.
+\begin{align*}
+& g_{ODI}(y) = 6 \text{ points/wicket (Wickets 4--7)} \\
+& \sum_{y=4}^{7} 6 = 24 \text{ points}
+\end{align*}
 
 \subsubsection{Tailenders}
-\indent $g_{ODI}(y) = 3 \text{ points/wicket (Wickets 8--10)} \Rightarrow \sum_{y=8}^{10} 3 = 9 \text{ points}$.
+\begin{align*}
+& g_{ODI}(y) = 3 \text{ points/wicket (Wickets 8--10)} \\
+& \sum_{y=8}^{10} 3 = 9 \text{ points}
+\end{align*}
 
 \vspace{1em}
 \noindent \textbf{Total ODI Wicket Capacity:} $27 + 24 + 9 = 60$ points.
@@ -206,33 +346,33 @@ R_{used} = O(u) + W(w) + F_u + F_w
 \vspace{1em}
 \noindent \textbf{Case 1: All out before total overs played} \\
 \indent Consider a T20 match where a team is all out ($w=10$) at 15.0 overs ($u=15, N=20$):
-\begin{enumerate}
-\item $O(15) = 54 \text{ (PP)} + (15-6) \times 4 \text{ (Mid)} = 54 + 36 = 90$ points.
-\item $W(10) = 40$ points.
-\item $F_u = \frac{10}{10} \times [160 - 90] = 1 \times 70 = 70$ points.
-\item $F_w = \frac{15}{20} \times [40 - 40] = 0.75 \times 0 = 0$ points.
-\item \textbf{Total:} $90 + 40 + 70 + 0 = 200$ points.
-\end{enumerate}
+\begin{align*}
+& O(15) = 54 \text{ (PP)} + (15-6) \times 4 \text{ (Mid)} = 54 + 36 = 90 \text{ points} \\
+& W(10) = 40 \text{ points} \\
+& F_u = \frac{10}{10} \times [160 - 90] = 1 \times 70 = 70 \text{ points} \\
+& F_w = \frac{15}{20} \times [40 - 40] = 0.75 \times 0 = 0 \text{ points} \\
+& R_{used} = 90 + 40 + 70 + 0 = 200 \text{ points}
+\end{align*}
 
 \noindent \textbf{Case 2: All overs played without getting all out} \\
 \indent Consider a T20 match where a team plays 20.0 overs ($u=20, N=20$) and loses 4 wickets ($w=4$):
-\begin{enumerate}
-\item $O(20) = 160$ points.
-\item $W(4) = 18 \text{ (Top)} + 1 \times 4 \text{ (Mid)} = 18 + 4 = 22$ points.
-\item $F_u = \frac{4}{10} \times [160 - 160] = 0$ points.
-\item $F_w = \frac{20}{20} \times [40 - 22] = 1 \times 18 = 18$ points.
-\item \textbf{Total:} $160 + 22 + 0 + 18 = 200$ points.
-\end{enumerate}
+\begin{align*}
+& O(20) = 160 \text{ points} \\
+& W(4) = 18 \text{ (Top)} + 1 \times 4 \text{ (Mid)} = 18 + 4 = 22 \text{ points} \\
+& F_u = \frac{4}{10} \times [160 - 160] = 0 \text{ points} \\
+& F_w = \frac{20}{20} \times [40 - 22] = 1 \times 18 = 18 \text{ points} \\
+& R_{used} = 160 + 22 + 0 + 18 = 200 \text{ points}
+\end{align*}
 
 \noindent \textbf{Case 3: All out and all overs played} \\
 \indent Consider a T20 match where a team is all out on the final ball ($u=20, w=10, N=20$):
-\begin{enumerate}
-\item $O(20) = 160$ points.
-\item $W(10) = 40$ points.
-\item $F_u = 1 \times [0] = 0$ points.
-\item $F_w = 1 \times [0] = 0$ points.
-\item \textbf{Total:} $160 + 40 + 0 + 0 = 200$ points.
-\end{enumerate}
+\begin{align*}
+& O(20) = 160 \text{ points} \\
+& W(10) = 40 \text{ points} \\
+& F_u = 1 \times [0] = 0 \text{ points} \\
+& F_w = 1 \times [0] = 0 \text{ points} \\
+& R_{used} = 160 + 40 + 0 + 0 = 200 \text{ points}
+\end{align*}
 
 \subsubsection{Why need Forfeiting Resources?}
 \indent In the physical reality of cricket, wickets constitute the ``risk capital'' of a batting team. When a wicket is lost, the team does not merely lose one batter; they lose a proportional share of their ability to exploit all subsequent overs. A team that is 100/0 after 10 overs has a vastly higher potential energy than a team at 100/5 after 10 overs. 
@@ -252,34 +392,43 @@ D = \frac{P_{total} - R_{used,1}}{k}
 
 \subsubsection{Sensitivity Analysis and Selection of $k$}
 
-\indent To determine the optimal value of the constant $k$, we evaluate an extremely high-volatility scenario where Team A finishes with $R_{used,1} = 20$ (representing a hyper-truncated 2-over burst) and $Score_A = 72$ runs. Team B has consumed $R_{used,2} = 10$ (exactly half of Team A's resource footprint). In this volatile snapshot, the raw ratio target would be $72 \times (10/20) = 36$ runs. This scenario tests the limits of the stabilizer $D$, as the lack of historical data for such short durations often leads to mathematical collapses in probabilistic models.
+\indent To determine the optimal value of the constant $k$, we evaluate an extremely high-volatility scenario where Team A finishes with $R_{used,1} = 20$ (representing a hyper-truncated 2-over burst) and $Score_A = 72$ runs. Team B has consumed $R_{used,2} = 10$ (exactly half of Team A's resource footprint).
 
-\indent Team A: 72/0 (2.0) \\
-\indent Team B: 0/0 (1.0)
+\vspace{1em}
+\noindent \textbf{Case $k=2$:}
+\begin{align*}
+& D = \frac{200 - 20}{2} = 90 \\
+& Par = 72 \times \frac{10 + 90}{20 + 90} = 72 \times \frac{100}{110} \approx 65.4 \\
+& \text{Par Score} \rightarrow 66
+\end{align*}
+\indent \textbf{Result:} The target of 66 runs is excessively high, nearly matching Team A's total despite Team B having only half the resources. This over-stabilization effectively erases the resource ratio.
 
-\indent The following cases evaluate the impact of different $k$ values on the resulting Par Score:
+\vspace{1em}
+\noindent \textbf{Case $k=4$:}
+\begin{align*}
+& D = \frac{200 - 20}{4} = 45 \\
+& Par = 72 \times \frac{10 + 45}{20 + 45} = 72 \times \frac{55}{65} \approx 60.9 \\
+& \text{Par Score} \rightarrow 61
+\end{align*}
+\indent \textbf{Result:} The target of 61 runs provides a balanced equilibrium. It recognizes the high scoring rate of Team A while providing necessary protection against the extreme volatility of a 20-point footprint.
 
-\begin{itemize}
-\item \textbf{Case $k=2$}: \\
-$D = (200 - 20) / 2 = 90$. \\
-$Par = 72 \times \frac{10 + 90}{20 + 90} = 72 \times \frac{100}{110} \approx 65.4 \rightarrow 66$. \\
-Result: The target of 66 runs is excessively high, nearly matching Team A's total despite Team B having only half the resources. This over-stabilization effectively erases the resource ratio.
+\vspace{1em}
+\noindent \textbf{Case $k=6$:}
+\begin{align*}
+& D = \frac{200 - 20}{6} = 30 \\
+& Par = 72 \times \frac{10 + 30}{20 + 30} = 72 \times \frac{40}{50} = 57.6 \\
+& \text{Par Score} \rightarrow 58
+\end{align*}
+\indent \textbf{Result:} A target of 58 runs begins to lean too heavily toward the raw resource ratio, offering diminishing protection as the match length decreases.
 
-\item \textbf{Case $k=4$}: \\
-$D = (200 - 20) / 4 = 45$. \\
-$Par = 72 \times \frac{10 + 45}{20 + 45} = 72 \times \frac{55}{65} \approx 60.9 \rightarrow 61$. \\
-Result: The target of 61 runs provides a balanced equilibrium. It recognizes the high scoring rate of Team A while providing necessary protection against the extreme volatility of a 20-point footprint.
-
-\item \textbf{Case $k=6$}: \\
-$D = (200 - 20) / 6 = 30$. \\
-$Par = 72 \times \frac{10 + 30}{20 + 30} = 72 \times \frac{40}{50} = 57.6 \rightarrow 58$. \\
-Result: A target of 58 runs begins to lean too heavily toward the raw resource ratio, offering diminishing protection as the match length decreases.
-
-\item \textbf{Case $k=8$}: \\
-$D = (200 - 20) / 8 = 22.5 \rightarrow 23$. \\
-$Par = 72 \times \frac{10 + 23}{20 + 23} = 72 \times \frac{33}{43} \approx 55.2 \rightarrow 56$. \\
-Result: At 56 runs, the stabilizer fails to sufficiently dampen the volatility. The target is diverted significantly from the stable region, risking an unfair advantage for the chasing team.
-\end{itemize}
+\vspace{1em}
+\noindent \textbf{Case $k=8$:}
+\begin{align*}
+& D = \frac{200 - 20}{8} = 22.5 \rightarrow 23 \\
+& Par = 72 \times \frac{10 + 23}{20 + 23} = 72 \times \frac{33}{43} \approx 55.2 \\
+& \text{Par Score} \rightarrow 56
+\end{align*}
+\indent \textbf{Result:} At 56 runs, the stabilizer fails to sufficiently dampen the volatility. The target is diverted significantly from the stable region, risking an unfair advantage for the chasing team.
 
 \subsubsection{Optimal Selection of $k$}
 
@@ -322,50 +471,66 @@ R_{used}(u, w, N) = \sum_{x=1}^{u} f(x) + \sum_{y=1}^{w} g(y) + \frac{w}{10} [O(
 \indent To validate my method, several hypothetical scenarios were simulated using the formal specification. These results demonstrate the model's behavior across standard rain delays and hyper-truncated interruptions.
 
 \subsection{The Hyper-Extreme Burst}
-Team A = 72/0 (2.0) \\
-Team B = 0/0 (1.0) \\
+\indent In this high-volatility scenario, Team A completes a hyper-truncated burst, setting a high scoring rate that Team B must now match in a single over. \\
+Team A: 72/0 (2.0) \\
+Team B: 0/0 (1.0) \\
 
-\indent \textbf{Results:} \\
-$R_{used,1} = 58.0000$ pts \\
-$R_{used,2} = 29.0000$ pts \\
-Stabilizer ($D$) = 36 pts \\
-\textbf{Par Score = 49.79 (Target = 50)}
+\indent \textbf{Results:}
+\begin{align*}
+& R_{used,1} = 58.0000 \text{ pts} \\
+& R_{used,2} = 29.0000 \text{ pts} \\
+& D = 35.5000 \text{ pts} \\
+& Par = 72 \times \frac{29.0 + 35.5}{58.0 + 35.5} = 49.63 \\
+& \text{Par Score = 49.63 (Target = 50)}
+\end{align*}
 
 \indent \textbf{Analysis:} Despite Team B having half the resources, the target is 50 (not 36) because the stabilizer $D$ accounts for the massive uncertainty and information advantage in a 1-over chase.
 
 \subsection{Standard T20 Rain Delay}
-Team A = 180/5 (20.0) \\
-Team B = 85/2 (10.0) \\
+\indent Team A has completed their innings with a solid total, and Team B is halfway through their chase but currently trails the par score due to the high weight of the remaining death overs. \\
+Team A: 180/5 (20.0) \\
+Team B: 85/2 (10.0) \\
 
-\indent \textbf{Results:} \\
-$R_{used,1} = 200.0000$ pts \\
-$R_{used,2} = 114.0000$ pts \\
-Stabilizer ($D$) = 0 pts \\
-\textbf{Par Score = 102.60 (Target = 103)}
+\indent \textbf{Results:}
+\begin{align*}
+& R_{used,1} = 200.0000 \text{ pts} \\
+& R_{used,2} = 114.0000 \text{ pts} \\
+& D = 0 \text{ pts} \\
+& Par = 180 \times \frac{114.0 + 0}{200.0 + 0} = 102.60 \\
+& \text{Par Score = 102.60 (Target = 103)}
+\end{align*}
 
 \indent \textbf{Analysis:} With $R_{used,1}$ at the 200-point ceiling, the stabilizer is removed. Team B is behind the par score of 103, reflecting the weight of the "Death Overs" points they have yet to face.
 
 \subsection{ODI Late Match Interruption}
-Team A = 320/8 (50.0) \\
-Team B = 240/4 (40.0) \\
+\indent In a high-scoring ODI, Team A sets a massive target. Team B is well-positioned with wickets in hand, but the interruption occurs just before the high-intensity final phase of the innings. \\
+Team A: 320/8 (50.0) \\
+Team B: 240/4 (40.0) \\
 
-\indent \textbf{Results:} \\
-$R_{used,1} = 200.0000$ pts \\
-$R_{used,2} = 164.6000$ pts \\
-Stabilizer ($D$) = 0 pts \\
-\textbf{Par Score = 263.36 (Target = 264)}
+\indent \textbf{Results:}
+\begin{align*}
+& R_{used,1} = 200.0000 \text{ pts} \\
+& R_{used,2} = 164.6000 \text{ pts} \\
+& D = 0 \text{ pts} \\
+& Par = 320 \times \frac{164.6 + 0}{200.0 + 0} = 263.36 \\
+& \text{Par Score = 263.36 (Target = 264)}
+\end{align*}
 
 \indent \textbf{Analysis:} The Par score of 264 indicates Team B is currently trailing, as the final 10 overs of an ODI represent a high-density resource phase that requires significant scoring potential.
 
 \subsection{The All-Out Penalty}
-Team A = 160/10 (18.4) \\
-Team B = 100/6 (15.0) \\
+\indent Team A is bowled out before completing their overs, forfeiting their remaining resource potential. Team B is in a precarious position after losing several wickets, which significantly raises their required par score. \\
+Team A: 160/10 (18.4) \\
+Team B: 100/6 (15.0) \\
 
-\indent \textbf{Results:} \\
-$R_{used,1} = 200.0000$ pts \\
-$R_{used,2} = 169.5000$ pts \\
-Stabilizer ($D$) = 0 pts \\
-\textbf{Par Score = 135.60 (Target = 136)}
+\indent \textbf{Results:}
+\begin{align*}
+& R_{used,1} = 200.0000 \text{ pts} \\
+& R_{used,2} = 169.5000 \text{ pts} \\
+& D = 0 \text{ pts} \\
+& Par = 160 \times \frac{169.5 + 0}{200.0 + 0} = 135.60 \\
+& \text{Par Score = 135.60 (Target = 136)}
+\end{align*}
 
 \indent \textbf{Analysis:} Because Team A was all out, they are credited with consuming 200 points. Team B, having lost 6 wickets, has a high forfeiture cost, raising their required par score to 136.
 
