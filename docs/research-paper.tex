@@ -322,55 +322,51 @@ R_{used}(u, w, N) = \sum_{x=1}^{u} f(x) + \sum_{y=1}^{w} g(y) + \frac{w}{10} [O(
 \indent To validate my method, several hypothetical scenarios were simulated using the formal specification. These results demonstrate the model's behavior across standard rain delays and hyper-truncated interruptions.
 
 \subsection{The Hyper-Extreme Burst}
-Team A: 72/0 (2.0) \\
-Team B: 0/0 (1.0) \\
+Team A = 72/0 (2.0) \\
+Team B = 0/0 (1.0) \\
 
-\indent \textbf{Results:}
-\begin{itemize}
-  \item $R_{used,1}$: 58.0000 pts
-  \item $R_{used,2}$: 29.0000 pts
-  \item Stabilizer ($D$): 36 pts
-  \item \textbf{Par Score: 49.79 (Target: 50)}
-\end{itemize}
+\indent \textbf{Results:} \\
+$R_{used,1} = 58.0000$ pts \\
+$R_{used,2} = 29.0000$ pts \\
+Stabilizer ($D$) = 36 pts \\
+\textbf{Par Score = 49.79 (Target = 50)}
+
 \indent \textbf{Analysis:} Despite Team B having half the resources, the target is 50 (not 36) because the stabilizer $D$ accounts for the massive uncertainty and information advantage in a 1-over chase.
 
 \subsection{Standard T20 Rain Delay}
-Team A: 180/5 (20.0) \\
-Team B: 85/2 (10.0) \\
+Team A = 180/5 (20.0) \\
+Team B = 85/2 (10.0) \\
 
-\indent \textbf{Results:}
-\begin{itemize}
-  \item $R_{used,1}$: 200.0000 pts
-  \item $R_{used,2}$: 114.0000 pts
-  \item Stabilizer ($D$): 0 pts
-  \item \textbf{Par Score: 102.60 (Target: 103)}
-\end{itemize}
+\indent \textbf{Results:} \\
+$R_{used,1} = 200.0000$ pts \\
+$R_{used,2} = 114.0000$ pts \\
+Stabilizer ($D$) = 0 pts \\
+\textbf{Par Score = 102.60 (Target = 103)}
+
 \indent \textbf{Analysis:} With $R_{used,1}$ at the 200-point ceiling, the stabilizer is removed. Team B is behind the par score of 103, reflecting the weight of the "Death Overs" points they have yet to face.
 
 \subsection{ODI Late Match Interruption}
-Team A: 320/8 (50.0) \\
-Team B: 240/4 (40.0) \\
+Team A = 320/8 (50.0) \\
+Team B = 240/4 (40.0) \\
 
-\indent \textbf{Results:}
-\begin{itemize}
-  \item $R_{used,1}$: 200.0000 pts
-  \item $R_{used,2}$: 164.6000 pts
-  \item Stabilizer ($D$): 0 pts
-  \item \textbf{Par Score: 263.36 (Target: 264)}
-\end{itemize}
+\indent \textbf{Results:} \\
+$R_{used,1} = 200.0000$ pts \\
+$R_{used,2} = 164.6000$ pts \\
+Stabilizer ($D$) = 0 pts \\
+\textbf{Par Score = 263.36 (Target = 264)}
+
 \indent \textbf{Analysis:} The Par score of 264 indicates Team B is currently trailing, as the final 10 overs of an ODI represent a high-density resource phase that requires significant scoring potential.
 
 \subsection{The All-Out Penalty}
-Team A: 160/10 (18.4) \\
-Team B: 100/6 (15.0) \\
+Team A = 160/10 (18.4) \\
+Team B = 100/6 (15.0) \\
 
-\indent \textbf{Results:}
-\begin{itemize}
-  \item $R_{used,1}$: 200.0000 pts
-  \item $R_{used,2}$: 169.5000 pts
-  \item Stabilizer ($D$): 0 pts
-  \item \textbf{Par Score: 135.60 (Target: 136)}
-\end{itemize}
+\indent \textbf{Results:} \\
+$R_{used,1} = 200.0000$ pts \\
+$R_{used,2} = 169.5000$ pts \\
+Stabilizer ($D$) = 0 pts \\
+\textbf{Par Score = 135.60 (Target = 136)}
+
 \indent \textbf{Analysis:} Because Team A was all out, they are credited with consuming 200 points. Team B, having lost 6 wickets, has a high forfeiture cost, raising their required par score to 136.
 
 \end{document}
