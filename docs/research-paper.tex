@@ -58,7 +58,7 @@ Par = Score_A \times \left( \frac{R_{used,2} + D}{R_{used,1} + D} \right)
 
 \indent In this formula, $Score_A$ represents the final total achieved by Team A. $R_{used,1}$ is the total resource footprint consumed by the team batting first at the conclusion of their innings, $R_{used,2}$ is the resource footprint consumed by the chasing team at the moment of interruption, and $D$ is the dynamic stabilizer variable. This ratio represents the ``transfer of value'' from the first innings to the second based on the proportion of the total capacity utilized by each team.
 
-\subsection{Description, Definitions, and Mathematical Statements}
+\subsection{Description:, Definitions, and Mathematical Statements}
 
 \indent The methodology replaces historical statistical probability with a deterministic resource model. The key definitions required for the implementation of this method are as follows:
 
@@ -458,19 +458,50 @@ N_{new} = N_{current} - Overs\_Washed\_Out
 R_{used}(u, w, N) = \sum_{x=1}^{u} f(x) + \sum_{y=1}^{w} g(y) + \frac{w}{10} [O(N) - O(u)] + \frac{u}{N} [W_{total} - W(w)]
 \end{equation}
 
-\section{Future Scopes}
+\section{Implementation Framework for Diverse Match Scenarios}
 
-\subsection{Average Run Rates}
-\indent Replacing static weights with an ARR-Adaptive Engine derived from historical databases to ensure the model evolves with the increasing scoring rates of modern cricket.
+\indent The Deterministic Framework is applied through two distinct mathematical lenses depending on the timing and nature of the interruption. These are categorized based on whether the objective is to set a new target before play (Target Revision) or to determine an equilibrium point during play (Par Score Snapshotting).
 
-\subsection{Machine Learning Based Predictions}
-\indent Integration of LSTM Networks to analyze ball-by-ball momentum and adjust the deterministic resource floor based on venue-specific conditions.
+\subsection{Category A: Completed First Innings}
+
+\subsubsection{Post-Innings Truncation (Target Revision)}
+\indent \textbf{Description:} Team A completes their innings ($R_{used,1} = 200$). Rain occurs during the break, reducing Team B's overs. \\
+\indent \textbf{Logic:} The target is revised by evaluating the ratio of the resource footprint Team A utilized against the resource capacity available to Team B in their new vessel.
+\begin{align*}
+& \text{Revised Target} = \text{Score}_A \times \left( \frac{R_{available,2}}{R_{used,1}} \right) + 1
+\end{align*}
+\indent Since $R_{used,1} = 200$, and $R_{available,2} = 200$ for a fresh chase of any length, the target remains $\text{Score}_A + 1$ unless the match is shortened to a length where the "intensity adjustment" (Section 10) is required.
+
+\subsubsection{Mid-Chase Truncation and Retrospective Termination}
+\indent \textbf{Description:} Team B is already batting when rain reduces overs or ends the match. \\
+\indent \textbf{Logic:} We utilize the Governing Equation with the Dynamic Stabilizer to find the equilibrium point at the moment of the snapshot.
+\begin{align*}
+& Par = Score_A \times \left( \frac{R_{used,2} + D}{R_{used,1} + D} \right)
+\end{align*}
+
+\subsection{Category B: Truncated First Innings}
+
+\subsubsection{Premature Termination of Innings 1}
+\indent \textbf{Description:} Rain stops play permanently while Team A is batting. Team B is then set a target. \\
+\indent \textbf{Logic:} Because Team A was prevented from using their full 200-point capacity, the target for Team B must reflect the ratio between what Team A *actually* used and what Team B is *available* to use.
+\begin{align*}
+& \text{Revised Target} = Score_A \times \left( \frac{R_{available,2}}{R_{used,1}} \right) + 1
+\end{align*}
+\indent Here, $R_{available,2}$ is the 200-point capacity of Team B's fresh chase vessel, while $R_{used,1}$ is the footprint of Team A's truncated innings.
+
+\subsubsection{Mid-Play Reduction (The "Accordion" Match)}
+\indent \textbf{Description:} Team A's overs are reduced mid-innings; they resume and finish the reduced innings. \\
+\indent \textbf{Logic:} Team A is credited with $R_{used,1}$ calculated against the *original* $N$, including forfeiture for overs lost. Team B's target is then set using the Ratio of Totals.
+\begin{align*}
+& \text{Revised Target} = Score_A \times \left( \frac{R_{available,2}}{R_{used,1}} \right) + 1
+\end{align*}
 
 \section{Match Simulations and Comparative Analysis}
 
-\indent To validate my method, several hypothetical scenarios were simulated using the formal specification. These results demonstrate the model's behavior across standard rain delays and hyper-truncated interruptions.
+\indent To validate the model's behavior across standard rain delays and hyper-truncated interruptions, several hypothetical scenarios were simulated using the formal specification. These results demonstrate the consistency of the deterministic framework under various intensities.
 
 \subsection{The Hyper-Extreme Burst}
+
 \indent In this high-volatility scenario, Team A completes a hyper-truncated burst, setting a high scoring rate that Team B must now match in a single over. \\
 Team A: 72/0 (2.0) \\
 Team B: 0/0 (1.0) \\
@@ -500,7 +531,7 @@ Team B: 85/2 (10.0) \\
 & \text{Par Score = 102.60 (Target = 103)}
 \end{align*}
 
-\indent \textbf{Analysis:} With $R_{used,1}$ at the 200-point ceiling, the stabilizer is removed. Team B is behind the par score of 103, reflecting the weight of the "Death Overs" points they have yet to face.
+\indent \textbf{Analysis:} At the 10-over mark (50\% of time), a Team with 0 wickets lost would require a Par Score of only 81 runs (45\% of the chase), reflecting the heavy weighting of the upcoming Death Overs. However, the loss of 2 wickets at this juncture triggers the "Wicket-Death Coupling" penalty. Because the remaining resource container holds the high-value Death phase (14 pts/over), the forfeiture cost ($F_u$) for those 2 wickets is amplified. This pushes the resource footprint to 114 points (57\%), raising the Par Score to 103. This correctly models the tactical reality: losing wickets early in a high-intensity chase disproportionately bankrupted the team's capacity to exploit the most valuable phase of the match.
 
 \subsection{ODI Late Match Interruption}
 \indent In a high-scoring ODI, Team A sets a massive target. Team B is well-positioned with wickets in hand, but the interruption occurs just before the high-intensity final phase of the innings. \\
@@ -533,5 +564,53 @@ Team B: 100/6 (15.0) \\
 \end{align*}
 
 \indent \textbf{Analysis:} Because Team A was all out, they are credited with consuming 200 points. Team B, having lost 6 wickets, has a high forfeiture cost, raising their required par score to 136.
+
+\section{Testing Formula on Real-World Data}
+
+\indent To validate the robustness of the deterministic framework, the model was tested against historical match data, most notably the high-volatility scenarios that exposed the limitations of previous target revision systems.
+
+\subsection{The 1992 World Cup Semi-Final Anomaly}
+\indent The 1992 semi-final between South Africa and England is the most infamous failure in cricket's target revision history. Under the "Most Productive Over" (MPO) method, South Africa's target was revised from 22 runs off 13 balls to 21 runs off 1 ball after a short rain delay. We apply the deterministic framework to this snapshot to evaluate the fairness of the outcome.
+
+\vspace{1em}
+\noindent \textbf{Input Data:} \\
+Team A (England): 252/6 (45.0/50.0) \\
+Team B (South Africa): 231/6 (42.5/45.0)
+
+\indent \textbf{Step 1: England's Resource Footprint ($R_{used,1}$)}
+\begin{align*}
+& O(45) = 30 + 60 + 25 = 115 \text{ pts} \\
+& W(6) = 27 + 18 = 45 \text{ pts} \\
+& F_u = 0.6 \times (140 - 115) = 15 \text{ pts} \\
+& F_w = (45/50) \times (60 - 45) = 13.5 \text{ pts} \\
+& R_{used,1} = 115 + 45 + 15 + 13.5 = 188.5 \text{ pts}
+\end{align*}
+
+\indent \textbf{Step 2: South Africa's Resource Footprint ($R_{used,2}$)}
+\begin{align*}
+& O(42.5) = 30 + 60 + 12.5 = 102.5 \text{ pts} \\
+& W(6) = 45 \text{ pts} \\
+& F_u = 0.6 \times (115 - 102.5) = 7.5 \text{ pts} \\
+& F_w = (42.5/45) \times (60 - 45) = 14.1667 \text{ pts} \\
+& R_{used,2} = 102.5 + 45 + 7.5 + 14.1667 = 169.1667 \text{ pts}
+\end{align*}
+
+\indent \textbf{Step 3: Par Score Derivation}
+\begin{align*}
+& D = (200 - 188.5) / 4 = 2.875 \text{ pts} \\
+& Par = 252 \times \frac{169.1667 + 2.875}{188.5 + 2.875} \\
+& Par = 252 \times 0.898977 = 226.54 \\
+& \text{Par Score = 227 (South Africa wins)}
+\end{align*}
+
+\indent \textbf{Analysis:} At the moment the match was stopped, South Africa (231/6) was 4 runs ahead of the Par Score (227). Unlike the MPO method, which effectively deleted South Africa's most productive batting overs, the deterministic model recognizes their strong resource position and awards them the victory based on a balanced transfer of value.
+
+\section{Future Scopes}
+
+\subsection{Average Run Rates}
+\indent Replacing static weights with an ARR-Adaptive Engine derived from historical databases to ensure the model evolves with the increasing scoring rates of modern cricket.
+
+\subsection{Machine Learning Based Predictions}
+\indent Integration of LSTM Networks to analyze ball-by-ball momentum and adjust the deterministic resource floor based on venue-specific conditions.
 
 \end{document}
