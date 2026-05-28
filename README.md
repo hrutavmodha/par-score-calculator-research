@@ -4,10 +4,9 @@ A deterministic, resource-based model for calculating revised targets in limited
 
 ## Overview
 
-This repository implements the **Crux (Cross-Resource Utilization Index) Method**, an alternative to the Duckworth-Lewis-Stern (DLS) system for target revision in rain-affected cricket matches. 
+This repository implements the **Crux (Cross-Resource Utilization Index) Method** for target revision in rain-affected cricket matches.
 
-Unlike DLS, which relies on statistical probability curves and historical averages, Crux is a **deterministic physical container model**. It treats a cricket innings as a finite vessel of potential energy, mapping the discrete resources of overs and wickets into a fixed 200-point capacity matrix ($P_{total} = 200$).
-
+Crux is a **deterministic physical container model**. It treats a cricket innings as a finite vessel of potential energy, mapping the discrete resources of overs and wickets into a fixed 200-point capacity matrix ($P_{total} = 200$).
 ### Key Features
 - **Deterministic Modeling**: Replaces statistical regression with a fixed resource matrix.
 - **Cross-Coupled Forfeiture**: Accounts for the physical entanglement of overs and wickets—where consuming time exposes wickets to risk, and losing wickets destroys future time-utility.

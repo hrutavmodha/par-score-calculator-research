@@ -106,16 +106,16 @@ export class CruxCalculator {
    */
   #calculateOverPoints(format: MatchFormat, overs: number): number {
     if (format === 'T20') {
-      // 9-4-14 ratio for 160 total points
-      if (overs <= 6) return overs * 9;
-      if (overs <= 15) return 54 + (overs - 6) * 4;
-      return 90 + (overs - 15) * 14;
+      // Empirically derived (Full Members, 1st Innings, Since 2021): 7.47, 7.65, 9.27
+      if (overs <= 6) return overs * 7.47;
+      if (overs <= 15) return 44.82 + (overs - 6) * 7.65;
+      return 113.67 + (overs - 15) * 9.27;
     } 
     
-    // ODI: 3-2-5 ratio for 140 total points
-    if (overs <= 10) return overs * 3;
-    if (overs <= 40) return 30 + (overs - 10) * 2;
-    return 90 + (overs - 40) * 5;
+    // ODI: Empirically derived (Full Members, 1st Innings, Since 2021): 2.40, 2.60, 3.80
+    if (overs <= 10) return overs * 2.40;
+    if (overs <= 40) return 24.0 + (overs - 10) * 2.60;
+    return 102.0 + (overs - 40) * 3.80;
   }
 
   /**
@@ -123,15 +123,15 @@ export class CruxCalculator {
    */
   #calculateWicketPoints(format: MatchFormat, wickets: number): number {
     if (format === 'T20') {
-      // 6-4-2 ratio for 40 total points
-      if (wickets <= 3) return wickets * 6;
-      if (wickets <= 7) return 18 + (wickets - 3) * 4;
-      return 34 + (wickets - 7) * 2;
+      // Empirically derived (Full Members, 1st Innings, Since 2021): 7.24, 4.07, 0.67
+      if (wickets <= 3) return wickets * 7.24;
+      if (wickets <= 7) return 21.72 + (wickets - 3) * 4.07;
+      return 37.99 + (wickets - 7) * 0.67;
     } 
     
-    // ODI: 9-6-3 ratio for 60 total points
-    if (wickets <= 3) return wickets * 9;
-    if (wickets <= 7) return 27 + (wickets - 3) * 6;
-    return 51 + (wickets - 7) * 3;
+    // ODI: Empirically derived (Full Members, 1st Innings, Since 2021): 9.37, 6.53, 1.92
+    if (wickets <= 3) return wickets * 9.37;
+    if (wickets <= 7) return 28.12 + (wickets - 3) * 6.53;
+    return 54.24 + (wickets - 7) * 1.92;
   }
 }

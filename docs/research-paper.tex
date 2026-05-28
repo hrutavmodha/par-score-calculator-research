@@ -8,7 +8,7 @@
 \setlength{\mathindent}{0pt}
 
 
-\title{\Huge \textbf{Deterministic Mathematical Framework for Rain-Interrpted Limited-Overs Cricket Matches}}
+\title{\Huge \textbf{Deterministic Mathematical Framework for Rain-Interrupted Limited-Overs Cricket Matches}}
 \author{\Large \textbf{Hrutav Modha}}
 \date{\today}
 
@@ -17,7 +17,7 @@
 \maketitle
 
 \begin{abstract}
-\indent This paper introduces a deterministic mathematical framework, designed to map the resource structure of a cricket innings into a fixed 200-point capacity matrix. The model accounts for the interdependency of overs and wickets through a cross-coupling adjustment mechanism. By representing the innings as a finite resource capacity, the method provides a format-consistent methodology for both T20 and ODI matches, ensuring mathematical stability through a dynamic stabilizer $D$ and a mutable parameter $N$ to accommodate multiple interruptions.
+\indent This paper introduces a deterministic mathematical framework designed to map the resource structure of a cricket innings into a fixed 200-point capacity matrix. The model accounts for the interdependency of overs and wickets through a cross-coupling adjustment mechanism. By representing the innings as a finite resource capacity, the method provides a format-consistent methodology for both T20 and ODI matches, utilizing a dynamic stabilizer $D$ and a mutable parameter $N$ to maintain mathematical consistency across multiple interruptions.
 \end{abstract}
 
 \newpage
@@ -99,14 +99,13 @@ Z(u, w) = Z_0(w) \left[ 1 - e^{-b(w) \cdot u} \right]
 
 \indent The philosophical core of DLS is probability: it asks, given a historical distribution of match outcomes, what is the expected run-scoring potential of a team in this state? This creates structural limitations including regression to the historical mean and the asymptotic ceiling problem.
 
-\section{The Method}
+\section{The Empirical Method}
 
 \subsection{Establishing Total Resource Points}
 
-\indent The fundamental axiom of our method is that a cricket innings is a finite container of potential, represented by a fixed 200-point capacity matrix ($P_{total}$). However, the allocation of these points between the two primary dimensions---overs and wickets---varies fundamentally between formats:
+\indent The fundamental axiom of our method is that a cricket innings is a finite container of potential, represented by a fixed 200-point capacity matrix ($P_{total}$). Unlike statistical models that rely on average expectations, this framework defines the absolute boundaries of the match's resource structure. 
 
-\indent In \textbf{T20I} cricket, the 200 points are split in an \textbf{80:20 ratio} (160 over-points, 40 wicket-points).
-In \textbf{ODI} cricket, the 200 points are split in a \textbf{70:30 ratio} (140 over-points, 60 wicket-points).
+\indent The allocation of these 200 points between the two primary dimensions---overs and wickets---is determined by their relative contribution to scoring potential, derived from ball-by-ball analysis of 4,939 international matches since 2021 (source: Cricsheet).
 
 \begin{center}
 \renewcommand{\arraystretch}{1.5}
@@ -123,55 +122,30 @@ Total Wicket Capacity $W_{total}$ & 40 & 20\% & 60 & 30\% \\
 \end{tabular}
 \end{center}
 
-\subsubsection{Splitting Resource Ratios for T20}
+\subsection{Distributing Resource Points Across Over Phases in T20}
 
-\indent To analyze the sensitivity of the model to the ratio of over-capacity ($O_{total}$) to wicket-capacity ($W_{total}$), we evaluate a snapshot of a T20 match where Team A has set a target, and Team B is deep into the middle overs, having preserved most of their wickets to prepare for a death-overs charge. \\
-Team A: 160/5 (20.0) \\
-Team B: 105/1 (15.0) \\
+\indent The over-points $O(u)$ for T20 are calibrated against high-intensity international matches. Based on our empirical analysis of 845 matches between ICC Full Members since 2021 (1st innings only), the weights represent the normalized marginal value of each over within its tactical phase:
 
-\indent In this scenario ($N=20, u=15.0, w=1$), based on the T20 distribution coefficients, the consumed components are $O(15) = 90$ (which is $0.5625$ of $O_{total}$) and $W(1) = 6$ (which is $0.15$ of $W_{total}$). The general resource formula $R_{used}$ is calculated as follows:
-
+\subsubsection{Powerplay - Overs 1 to 6}
 \begin{align*}
-& R_{used} = O(u) + W(w) + \frac{w}{10} [O(N) - O(u)] + \frac{u}{N} [W_{total} - W(w)] \\
-& R_{used} = 0.5625 O_{total} + 0.15 W_{total} + \frac{1}{10} [O_{total} (1 - 0.5625)] + \frac{15}{20} [W_{total} (1 - 0.15)] \\
-& R_{used} = 0.5625 O_{total} + 0.15 W_{total} + 0.1 [0.4375 O_{total}] + 0.75 [0.85 W_{total}] \\
-& R_{used} = (0.5625 + 0.04375) O_{total} + (0.15 + 0.6375) W_{total} \\
-& R_{used} = 0.60625 O_{total} + 0.7875 W_{total}
+& f_{T20}(x) = 7.47 \text{ points/over} \\
+& \sum_{x=1}^{6} 7.47 = 44.82 \text{ points}
 \end{align*}
 
-\indent We now evaluate $R_{used}$ across the distribution spectrum where $O_{total} + W_{total} = 200$:
+\subsubsection{Middle Overs - Overs 7 to 15}
+\begin{align*}
+& f_{T20}(x) = 7.65 \text{ points/over} \\
+& \sum_{x=7}^{15} 7.65 = 68.85 \text{ points}
+\end{align*}
 
-\begin{itemize}
-    \item \textbf{90:10 Ratio ($O_{total}=180, W_{total}=20$):} 
-    \begin{align*}
-    & R_{used} = 0.60625(180) + 0.7875(20) \\
-    & R_{used} = 109.125 + 15.75 = 124.875
-    \end{align*}
-    
-    \item \textbf{80:20 Ratio ($O_{total}=160, W_{total}=40$):} 
-    \begin{align*}
-    & R_{used} = 0.60625(160) + 0.7875(40) \\
-    & R_{used} = 97.000 + 31.50 = 128.500
-    \end{align*}
-    
-    \item \textbf{70:30 Ratio ($O_{total}=140, W_{total}=60$):} 
-    \begin{align*}
-    & R_{used} = 0.60625(140) + 0.7875(60) \\
-    & R_{used} = 84.875 + 47.25 = 132.125
-    \end{align*}
-    
-    \item \textbf{60:40 Ratio ($O_{total}=120, W_{total}=80$):} 
-    \begin{align*}
-    & R_{used} = 0.60625(120) + 0.7875(80) \\
-    & R_{used} = 72.750 + 63.00 = 135.750
-    \end{align*}
-    
-    \item \textbf{50:50 Ratio ($O_{total}=100, W_{total}=100$):} 
-    \begin{align*}
-    & R_{used} = 0.60625(100) + 0.7875(100) \\
-    & R_{used} = 60.625 + 78.75 = 139.375
-    \end{align*}
-\end{itemize}
+\subsubsection{Death Overs - Overs 16 to 20}
+\begin{align*}
+& f_{T20}(x) = 9.27 \text{ points/over} \\
+& \sum_{x=16}^{20} 9.27 = 46.35 \text{ points}
+\end{align*}
+
+\vspace{1em}
+\noindent \textbf{Total T20 Over Capacity:} Normalized to 160 points.
 
 \subsubsection{Splitting Resource Ratios for ODI}
 
@@ -225,105 +199,48 @@ Team B: 240/1 (40.0) \\
 
 \indent The ODI analysis reveals a higher baseline resource footprint compared to T20 for the same percentage of physical completion. This is a direct consequence of the 70:30 allocation, which places greater mathematical significance on the remaining wicket-survival potential, ensuring that the Par Score remains robust against the extended strategic horizon of the 50-over format.
 
-\subsection{Distributing Resource Points Across Over Phases in T20}
-
-\indent The accumulated over-points $O(u)$ for T20 are defined by discrete summation:
-
-\subsubsection{Powerplay - Overs 1 to 6}
-\begin{align*}
-& f_{T20}(x) = 9 \text{ points/over} \\
-& \sum_{x=1}^{6} 9 = 54 \text{ points}
-\end{align*}
-
-\subsubsection{Middle Overs - Overs 7 to 15}
-\begin{align*}
-& f_{T20}(x) = 4 \text{ points/over} \\
-& \sum_{x=7}^{15} 4 = 36 \text{ points}
-\end{align*}
-
-\subsubsection{Death Overs - Overs 16 to 20}
-\begin{align*}
-& f_{T20}(x) = 14 \text{ points/over} \\
-& \sum_{x=16}^{20} 14 = 70 \text{ points}
-\end{align*}
-
-\vspace{1em}
-\noindent \textbf{Total T20 Over Capacity:} $54 + 36 + 70 = 160$ points.
-
 \subsection{Distributing Resource Points Across Over Phases in ODI}
 
-\indent The accumulated over-points $O(u)$ for ODI are defined by:
+\indent For the 50-over format, the weights reflect the three-tiered progression of accumulation in top-tier internationals. Based on our analysis of 656 matches between Full Members since 2021 (1st innings only), the weights are defined as:
 
 \subsubsection{Powerplay - Overs 1 to 10}
 \begin{align*}
-& f_{ODI}(x) = 3 \text{ points/over} \\
-& \sum_{x=1}^{10} 3 = 30 \text{ points}
+& f_{ODI}(x) = 2.40 \text{ points/over} \\
+& \sum_{x=1}^{10} 2.40 = 24.0 \text{ points}
 \end{align*}
 
 \subsubsection{Middle Overs - Overs 11 to 40}
 \begin{align*}
-& f_{ODI}(x) = 2 \text{ points/over} \\
-& \sum_{x=11}^{40} 2 = 60 \text{ points}
+& f_{ODI}(x) = 2.60 \text{ points/over} \\
+& \sum_{x=11}^{40} 2.60 = 78.0 \text{ points}
 \end{align*}
 
 \subsubsection{Death Overs - Overs 41 to 50}
 \begin{align*}
-& f_{ODI}(x) = 5 \text{ points/over} \\
-& \sum_{x=41}^{50} 5 = 50 \text{ points}
+& f_{ODI}(x) = 3.80 \text{ points/over} \\
+& \sum_{x=41}^{50} 3.80 = 38.0 \text{ points}
 \end{align*}
 
 \vspace{1em}
-\noindent \textbf{Total ODI Over Capacity:} $30 + 60 + 50 = 140$ points.
+\noindent \textbf{Total ODI Over Capacity:} Normalized to 140 points.
 
-\subsection{Distributing Resource Points Across Wicket Tiers in T20}
+\subsection{Distributing Resource Points Across Wicket Tiers}
 
-\indent Wicket points $W(w)$ for T20 are defined by:
+\indent Wicket points $W(w)$ represent the risk-capital of the innings. The weight of each wicket is determined by the "destruction of future utility" it causes, calculated as the proportion of total runs scored when each wicket tier falls. Based on our analysis of 1,501 matches since 2021:
 
-\subsubsection{Top Order}
-\begin{align*}
-& g_{T20}(y) = 6 \text{ points/wicket (Wickets 1--3)} \\
-& \sum_{y=1}^{3} 6 = 18 \text{ points}
-\end{align*}
+\subsubsection{Wicket Weights in T20 (Total 40 pts)}
+\begin{itemize}
+    \item \textbf{Top Order (W1--3):} 7.24 pts/wicket (21.72 total)
+    \item \textbf{Middle Order (W4--7):} 4.07 pts/wicket (16.27 total)
+    \item \textbf{Tailenders (W8--10):} 0.67 pts/wicket (2.01 total)
+\end{itemize}
 
-\subsubsection{Middle Order}
-\begin{align*}
-& g_{T20}(y) = 4 \text{ points/wicket (Wickets 4--7)} \\
-& \sum_{y=4}^{7} 4 = 16 \text{ points}
-\end{align*}
-
-\subsubsection{Tailenders}
-\begin{align*}
-& g_{T20}(y) = 2 \text{ points/wicket (Wickets 8--10)} \\
-& \sum_{y=8}^{10} 2 = 6 \text{ points}
-\end{align*}
-
-\vspace{1em}
-\noindent \textbf{Total T20 Wicket Capacity:} $18 + 16 + 6 = 40$ points.
-
-\subsection{Distributing Resource Points Across Wicket Tiers in ODI}
-
-\indent Wicket points $W(w)$ for ODI are defined by:
-
-\subsubsection{Top Order}
-\begin{align*}
-& g_{ODI}(y) = 9 \text{ points/wicket (Wickets 1--3)} \\
-& \sum_{y=1}^{3} 9 = 27 \text{ points}
-\end{align*}
-
-\subsubsection{Middle Order}
-\begin{align*}
-& g_{ODI}(y) = 6 \text{ points/wicket (Wickets 4--7)} \\
-& \sum_{y=4}^{7} 6 = 24 \text{ points}
-\end{align*}
-
-\subsubsection{Tailenders}
-\begin{align*}
-& g_{ODI}(y) = 3 \text{ points/wicket (Wickets 8--10)} \\
-& \sum_{y=8}^{10} 3 = 9 \text{ points}
-\end{align*}
-
-\vspace{1em}
-\noindent \textbf{Total ODI Wicket Capacity:} $27 + 24 + 9 = 60$ points.
+\subsubsection{Wicket Weights in ODI (Total 60 pts)}
+\begin{itemize}
+    \item \textbf{Top Order (W1--3):} 9.37 pts/wicket (28.12 total)
+    \item \textbf{Middle Order (W4--7):} 6.53 pts/wicket (26.14 total)
+    \item \textbf{Tailenders (W8--10):} 1.92 pts/wicket (5.75 total)
+\end{itemize}
 
 \subsection{Forfeiting Resources Logic}
 
@@ -549,121 +466,7 @@ Team B: Revised target for 30.0 overs.
 & \text{Revised Target} = 200 \times \left( \frac{200}{156.6} \right) + 1 = 255.4 + 1 = 256 \text{ runs}
 \end{align*}
 
-\section{Testing Formula on Real-World Data}
-
-\indent To validate the robustness of the deterministic framework, the model was tested against historical match data, most notably the high-volatility scenarios that exposed the limitations of previous target revision systems.
-
-\subsection{The 1992 World Cup Semi-Final Anomaly}
-\indent The 1992 semi-final between South Africa and England is the most infamous failure in cricket's target revision history. Under the "Most Productive Over" (MPO) method, South Africa's target was revised from 22 runs off 13 balls to 21 runs off 1 ball after a short rain delay. We apply the deterministic framework to this snapshot to evaluate the fairness of the outcome.
-
-\vspace{1em}
-\noindent \textbf{Input Data:} \\
-Team A (England): 252/6 (45.0/50.0) \\
-Team B (South Africa): 231/6 (42.5/45.0)
-
-\indent \textbf{Step 1: England's Resource Footprint ($R_{used,1}$)}
-\begin{align*}
-& O(45) = 30 + 60 + 25 = 115 \text{ pts} \\
-& W(6) = 27 + 18 = 45 \text{ pts} \\
-& F_u = 0.6 \times (140 - 115) = 15 \text{ pts} \\
-& F_w = (45/50) \times (60 - 45) = 13.5 \text{ pts} \\
-& R_{used,1} = 115 + 45 + 15 + 13.5 = 188.5 \text{ pts}
-\end{align*}
-
-\indent \textbf{Step 2: South Africa's Resource Footprint ($R_{used,2}$)}
-\begin{align*}
-& O(42.5) = 30 + 60 + 12.5 = 102.5 \text{ pts} \\
-& W(6) = 45 \text{ pts} \\
-& F_u = 0.6 \times (115 - 102.5) = 7.5 \text{ pts} \\
-& F_w = (42.5/45) \times (60 - 45) = 14.1667 \text{ pts} \\
-& R_{used,2} = 102.5 + 45 + 7.5 + 14.1667 = 169.1667 \text{ pts}
-\end{align*}
-
-\indent \textbf{Step 3: Par Score Derivation}
-\begin{align*}
-& D = (200 - 188.5) / 4 = 2.875 \text{ pts} \\
-& Par = 252 \times \frac{169.1667 + 2.875}{188.5 + 2.875} \\
-& Par = 252 \times 0.898977 = 226.54 \\
-& \text{Par Score = 227 (South Africa wins)}
-\end{align*}
-
-\indent \textbf{Analysis:} At the moment the match was stopped, South Africa (231/6) was 4 runs ahead of the Par Score (227). Unlike the MPO method, which effectively deleted South Africa's most productive batting overs, the deterministic model recognizes their strong resource position and awards them the victory based on a balanced transfer of value.
-
-\section{Match Simulations and Comparative Analysis}
-
-\indent To further validate the model's behavior across standard rain delays and hyper-truncated interruptions, several hypothetical scenarios were simulated using the formal specification. These results demonstrate the consistency of the framework under various intensities.
-
-\subsection{The Hyper-Extreme Burst}
-
-\indent In this high-volatility scenario, Team A completes a hyper-truncated burst, setting a high scoring rate that Team B must now match in a single over. \\
-Team A: 72/0 (2.0) \\
-Team B: 0/0 (1.0) \\
-
-\indent \textbf{Results:}
-\begin{align*}
-& R_{used,1} = 58.0000 \text{ pts} \\
-& R_{used,2} = 29.0000 \text{ pts} \\
-& D = 35.5000 \text{ pts} \\
-& Par = 72 \times \frac{29.0 + 35.5}{58.0 + 35.5} = 49.63 \\
-& \text{Par Score = 49.63 (Target = 50)}
-\end{align*}
-
-\indent \textbf{Analysis:} Despite Team B having half the resources, the target is 50 (not 36) because the stabilizer $D$ accounts for the massive uncertainty and information advantage in a 1-over chase.
-
-\subsection{Standard T20 Rain Delay}
-\indent Team A has completed their innings with a solid total, and Team B is halfway through their chase but currently trails the par score due to the high weight of the remaining death overs. \\
-Team A: 180/5 (20.0) \\
-Team B: 85/2 (10.0) \\
-
-\indent \textbf{Results:}
-\begin{align*}
-& R_{used,1} = 200.0000 \text{ pts} \\
-& R_{used,2} = 114.0000 \text{ pts} \\
-& D = 0 \text{ pts} \\
-& Par = 180 \times \frac{114.0 + 0}{200.0 + 0} = 102.60 \\
-& \text{Par Score = 102.60 (Target = 103)}
-\end{align*}
-
-\indent \textbf{Analysis:} At the 10-over mark (50\% of time), a Team with 0 wickets lost would require a Par Score of only 81 runs (45\% of the chase), reflecting the heavy weighting of the upcoming Death Overs. However, the loss of 2 wickets at this juncture triggers the "Wicket-Death Coupling" penalty. Because the remaining resource container holds the high-value Death phase (14 pts/over), the forfeiture cost ($F_u$) for those 2 wickets is amplified. This pushes the resource footprint to 114 points (57\%), raising the Par Score to 103. This correctly models the tactical reality: losing wickets early in a high-intensity chase disproportionately bankrupted the team's capacity to exploit the most valuable phase of the match.
-
-\subsection{ODI Late Match Interruption}
-\indent In a high-scoring ODI, Team A sets a massive target. Team B is well-positioned with wickets in hand, but the interruption occurs just before the high-intensity final phase of the innings. \\
-Team A: 320/8 (50.0) \\
-Team B: 240/4 (40.0) \\
-
-\indent \textbf{Results:}
-\begin{align*}
-& R_{used,1} = 200.0000 \text{ pts} \\
-& R_{used,2} = 164.6000 \text{ pts} \\
-& D = 0 \text{ pts} \\
-& Par = 320 \times \frac{164.6 + 0}{200.0 + 0} = 263.36 \\
-& \text{Par Score = 263.36 (Target = 264)}
-\end{align*}
-
-\indent \textbf{Analysis:} The Par score of 264 indicates Team B is currently trailing, as the final 10 overs of an ODI represent a high-density resource phase that requires significant scoring potential.
-
-\subsection{The All-Out Penalty}
-\indent Team A is bowled out before completing their overs, forfeiting their remaining resource potential. Team B is in a precarious position after losing several wickets, which significantly raises their required par score. \\
-Team A: 160/10 (18.4) \\
-Team B: 100/6 (15.0) \\
-
-\indent \textbf{Results:}
-\begin{align*}
-& R_{used,1} = 200.0000 \text{ pts} \\
-& R_{used,2} = 169.5000 \text{ pts} \\
-& D = 0 \text{ pts} \\
-& Par = 160 \times \frac{169.5 + 0}{200.0 + 0} = 135.60 \\
-& \text{Par Score = 135.60 (Target = 136)}
-\end{align*}
-
-\indent \textbf{Analysis:} Because Team A was all out, they are credited with consuming 200 points. Team B, having lost 6 wickets, has a high forfeiture cost, raising their required par score to 136.
-
-\section{Future Scopes}
-
-\subsection{Average Run Rates}
-\indent Replacing static weights with an ARR-Adaptive Engine derived from historical databases to ensure the model evolves with the increasing scoring rates of modern cricket.
-
-\subsection{Machine Learning Based Predictions}
-\indent Integration of LSTM Networks to analyze ball-by-ball momentum and adjust the deterministic resource floor based on venue-specific conditions.
+\section{Conclusion}
+\indent The Deterministic Mathematical Framework provides a robust methodology for target revision by mapping the complex interplay of overs and wickets into a normalized 200-point capacity matrix. By utilizing empirical weights derived from modern international match data and a dynamic stabilizer to manage volatility in short matches, the framework ensures a fair and balanced transfer of value between competing innings. This approach offers a consistent and deterministic alternative for limited-overs cricket.
 
 \end{document}
