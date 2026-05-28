@@ -1,6 +1,6 @@
 import math
 from typing import TypedDict, Literal, Optional
-from src.weights import T20_WEIGHTS, ODI_WEIGHTS
+from src.weights import weights_manager
 
 MatchFormat = Literal['T20', 'ODI']
 
@@ -18,13 +18,15 @@ class CruxCalculator:
     def __init__(self):
         self._P_TOTAL = 200
 
+    def update_weights(self):
+        """Manually trigger a recalculation of the weights."""
+        return weights_manager.update()
+
     def _get_weights(self, format_name: MatchFormat):
-        if format_name == "T20":
-            return T20_WEIGHTS
-        elif format_name == "ODI":
-            return ODI_WEIGHTS
-        else:
-            raise Exception(f"Invalid format name '{format_name}'")
+        try:
+            return weights_manager.get_weights(format_name)
+        except ValueError as e:
+            raise Exception(str(e))
 
     def calculate_resource_footprint(self, format_name: MatchFormat, state: MatchState) -> float:
         weights = self._get_weights(format_name)
