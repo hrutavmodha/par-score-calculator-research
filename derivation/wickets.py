@@ -2,12 +2,7 @@ import pandas as pd
 import glob
 from datetime import datetime
 from typing import Dict, Tuple
-
-FULL_MEMBERS = {
-    'Afghanistan', 'Australia', 'Bangladesh', 'England', 'India', 
-    'Ireland', 'New Zealand', 'Pakistan', 'South Africa', 
-    'Sri Lanka', 'West Indies', 'Zimbabwe'
-}
+from derivation.full_members import FULL_MEMBERS
 
 def get_wicket_weights(format_name: str, total_wicket_points: int) -> Tuple[float, float, float]:
     files = glob.glob(f'data/{format_name}/*.csv')

@@ -105,7 +105,7 @@ Z(u, w) = Z_0(w) \left[ 1 - e^{-b(w) \cdot u} \right]
 
 \indent The fundamental axiom of our method is that a cricket innings is a finite container of potential, represented by a fixed 200-point capacity matrix ($P_{total}$). Unlike statistical models that rely on average expectations, this framework defines the absolute boundaries of the match's resource structure. 
 
-\indent The allocation of these 200 points between the two primary dimensions---overs and wickets---is determined by their relative contribution to scoring potential, derived from ball-by-ball analysis of 4,939 international matches since 2021 (source: Cricsheet).
+\indent The allocation of these 200 points between the two primary dimensions---overs and wickets---is determined by their relative contribution to scoring potential, derived from ball-by-ball analysis of 1,501 international matches between ICC Full Members since 2021 (source: Cricsheet).
 
 \begin{center}
 \renewcommand{\arraystretch}{1.5}
@@ -122,23 +122,44 @@ Total Wicket Capacity $W_{total}$ & 40 & 20\% & 60 & 30\% \\
 \end{tabular}
 \end{center}
 
+\subsection{Mathematical Derivation of Weights}
+
+\subsubsection{Over Phase Weights ($f(x)$)}
+\indent To derive the weight of an over in a specific phase, we first calculate the average Run Rate (RPO) for that phase using 1st-innings data from ICC Full Member matches. The raw RPO is then normalized to ensure the total over points sum to the format-specific target (160 for T20, 140 for ODI).
+
+\begin{align*}
+& RPO_{\text{phase}} = \frac{\sum \text{Runs in Phase}}{\sum \text{Balls in Phase}} \times 6 \\
+& \text{Expected Runs}_{\text{phase}} = RPO_{\text{phase}} \times \text{Length of Phase (Overs)} \\
+& \text{Normalization Factor} (\lambda) = \frac{\text{Target Over Points}}{\sum \text{Expected Runs in all phases}} \\
+& f(x) = RPO_{\text{phase}} \times \lambda
+\end{align*}
+
+\subsubsection{Wicket Tier Weights ($g(y)$)}
+\indent Wicket weights are derived based on the proportion of total runs scored when specific wicket thresholds are reached (the 3rd and 7th wickets). This ensures that the weights reflect the "destruction of future utility" inherent in losing wickets.
+
+\begin{align*}
+& \text{Weight}_{\text{Top Order (1-3)}} = \left( \frac{\text{Avg. Runs at } W=3}{\text{Avg. Total Runs}} \right) \times W_{total} \\
+& \text{Weight}_{\text{Mid Order (4-7)}} = \left( \frac{\text{Avg. Runs at } W=7 - \text{Avg. Runs at } W=3}{\text{Avg. Total Runs}} \right) \times W_{total} \\
+& \text{Weight}_{\text{Lower Order (8-10)}} = \left( \frac{\text{Avg. Total Runs} - \text{Avg. Runs at } W=7}{\text{Avg. Total Runs}} \right) \times W_{total}
+\end{align*}
+
 \subsection{Distributing Resource Points Across Over Phases in T20}
 
-\indent The over-points $O(u)$ for T20 are calibrated against high-intensity international matches. Based on our empirical analysis of 845 matches between ICC Full Members since 2021 (1st innings only), the weights represent the normalized marginal value of each over within its tactical phase:
+\indent The over-points $O(u)$ for T20 are calibrated against high-intensity international matches. Based on our empirical analysis of 845 matches between ICC Full Members since 2021 (1st innings only), where the average 1st innings total was 153.24 runs, the derived weights are:
 
-\subsubsection{Powerplay - Overs 1 to 6}
+\subsubsection{Powerplay - Overs 1 to 6 (RPO: 7.15)}
 \begin{align*}
 & f_{T20}(x) = 7.47 \text{ points/over} \\
 & \sum_{x=1}^{6} 7.47 = 44.82 \text{ points}
 \end{align*}
 
-\subsubsection{Middle Overs - Overs 7 to 15}
+\subsubsection{Middle Overs - Overs 7 to 15 (RPO: 7.33)}
 \begin{align*}
 & f_{T20}(x) = 7.65 \text{ points/over} \\
 & \sum_{x=7}^{15} 7.65 = 68.85 \text{ points}
 \end{align*}
 
-\subsubsection{Death Overs - Overs 16 to 20}
+\subsubsection{Death Overs - Overs 16 to 20 (RPO: 8.88)}
 \begin{align*}
 & f_{T20}(x) = 9.27 \text{ points/over} \\
 & \sum_{x=16}^{20} 9.27 = 46.35 \text{ points}
@@ -147,75 +168,23 @@ Total Wicket Capacity $W_{total}$ & 40 & 20\% & 60 & 30\% \\
 \vspace{1em}
 \noindent \textbf{Total T20 Over Capacity:} Normalized to 160 points.
 
-\subsubsection{Splitting Resource Ratios for ODI}
-
-\indent To analyze the sensitivity of the model for the 50-over format, we evaluate an equivalent physical state in an ODI match where Team A has set a target, and Team B is entering the final ten-over phase, having lost only a single wicket and maintaining a steady accumulation rate. \\
-Team A: 300/5 (50.0) \\
-Team B: 240/1 (40.0) \\
-
-\indent In this scenario ($N=50, u=40.0, w=1$), based on the ODI distribution coefficients, the consumed components are $O(40) = 90$ (which is $0.6428$ of $O_{total}$) and $W(1) = 9$ (which is $0.15$ of $W_{total}$). The general resource formula $R_{used}$ is calculated as follows:
-
-\begin{align*}
-& R_{used} = O(u) + W(w) + \frac{w}{10} [O(N) - O(u)] + \frac{u}{N} [W_{total} - W(w)] \\
-& R_{used} = 0.6428 O_{total} + 0.15 W_{total} + \frac{1}{10} [O_{total} (1 - 0.6428)] + \frac{40}{50} [W_{total} (1 - 0.15)] \\
-& R_{used} = 0.6428 O_{total} + 0.15 W_{total} + 0.1 [0.3572 O_{total}] + 0.8 [0.85 W_{total}] \\
-& R_{used} = (0.6428 + 0.03572) O_{total} + (0.15 + 0.68) W_{total} \\
-& R_{used} = 0.67852 O_{total} + 0.83 W_{total}
-\end{align*}
-
-\indent Evaluating $R_{used}$ across the distribution spectrum ($O_{total} + W_{total} = 200$):
-
-\begin{itemize}
-    \item \textbf{90:10 Ratio ($O_{total}=180, W_{total}=20$):} 
-    \begin{align*}
-    & R_{used} = 0.67852(180) + 0.83(20) \\
-    & R_{used} = 122.1336 + 16.6 = 138.7336
-    \end{align*}
-    
-    \item \textbf{80:20 Ratio ($O_{total}=160, W_{total}=40$):} 
-    \begin{align*}
-    & R_{used} = 0.67852(160) + 0.83(40) \\
-    & R_{used} = 108.5632 + 33.2 = 141.7632
-    \end{align*}
-    
-    \item \textbf{70:30 Ratio ($O_{total}=140, W_{total}=60$):} 
-    \begin{align*}
-    & R_{used} = 0.67852(140) + 0.83(60) \\
-    & R_{used} = 94.9928 + 49.8 = 144.7928
-    \end{align*}
-    
-    \item \textbf{60:40 Ratio ($O_{total}=120, W_{total}=80$):} 
-    \begin{align*}
-    & R_{used} = 0.67852(120) + 0.83(80) \\
-    & R_{used} = 81.4224 + 66.4 = 147.8224
-    \end{align*}
-    
-    \item \textbf{50:50 Ratio ($O_{total}=100, W_{total}=100$):} 
-    \begin{align*}
-    & R_{used} = 0.67852(100) + 0.83(100) \\
-    & R_{used} = 67.852 + 83.0 = 150.852
-    \end{align*}
-\end{itemize}
-
-\indent The ODI analysis reveals a higher baseline resource footprint compared to T20 for the same percentage of physical completion. This is a direct consequence of the 70:30 allocation, which places greater mathematical significance on the remaining wicket-survival potential, ensuring that the Par Score remains robust against the extended strategic horizon of the 50-over format.
-
 \subsection{Distributing Resource Points Across Over Phases in ODI}
 
-\indent For the 50-over format, the weights reflect the three-tiered progression of accumulation in top-tier internationals. Based on our analysis of 656 matches between Full Members since 2021 (1st innings only), the weights are defined as:
+\indent For the 50-over format, the weights reflect the three-tiered progression of accumulation in top-tier internationals (Avg. Total: 262.98 runs). Based on our analysis of 656 matches since 2021 (1st innings only):
 
-\subsubsection{Powerplay - Overs 1 to 10}
+\subsubsection{Powerplay - Overs 1 to 10 (RPO: 4.51)}
 \begin{align*}
 & f_{ODI}(x) = 2.40 \text{ points/over} \\
 & \sum_{x=1}^{10} 2.40 = 24.0 \text{ points}
 \end{align*}
 
-\subsubsection{Middle Overs - Overs 11 to 40}
+\subsubsection{Middle Overs - Overs 11 to 40 (RPO: 4.89)}
 \begin{align*}
 & f_{ODI}(x) = 2.60 \text{ points/over} \\
 & \sum_{x=11}^{40} 2.60 = 78.0 \text{ points}
 \end{align*}
 
-\subsubsection{Death Overs - Overs 41 to 50}
+\subsubsection{Death Overs - Overs 41 to 50 (RPO: 7.13)}
 \begin{align*}
 & f_{ODI}(x) = 3.80 \text{ points/over} \\
 & \sum_{x=41}^{50} 3.80 = 38.0 \text{ points}
@@ -226,7 +195,7 @@ Team B: 240/1 (40.0) \\
 
 \subsection{Distributing Resource Points Across Wicket Tiers}
 
-\indent Wicket points $W(w)$ represent the risk-capital of the innings. The weight of each wicket is determined by the "destruction of future utility" it causes, calculated as the proportion of total runs scored when each wicket tier falls. Based on our analysis of 1,501 matches since 2021:
+\indent Wicket points $W(w)$ represent the risk-capital of the innings. Based on the ratios of runs scored at the fall of the 3rd and 7th wickets to the total match runs, we derive the following values:
 
 \subsubsection{Wicket Weights in T20 (Total 40 pts)}
 \begin{itemize}

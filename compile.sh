@@ -1,8 +1,5 @@
 #!/bin/bash
-mkdir -p dist/docs
-
-# Compile implementation
-npx tsc
+mkdir -p build/
 
 # Compile research paper
 pdflatex -output-directory dist/docs -jobname research-paper docs/research-paper.tex

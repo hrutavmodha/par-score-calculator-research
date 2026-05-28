@@ -74,11 +74,12 @@ class CruxCalculator:
             if overs <= pm[1]: return overs * w[1]
             if overs <= pm[2]: return (pm[1] * w[1]) + (overs - pm[1]) * w[2]
             return (pm[1] * w[1]) + (pm[2] - pm[1]) * w[2] + (overs - pm[2]) * w[3]
-        else: # ODI
+        elif format_name == 'ODI':
             if overs <= pm[1]: return overs * w[1]
             if overs <= pm[2]: return (pm[1] * w[1]) + (overs - pm[1]) * w[2]
             return (pm[1] * w[1]) + (pm[2] - pm[1]) * w[2] + (overs - pm[2]) * w[3]
-
+        else:
+            raise Exception(f"Invalid format: '{format_name}'")
     def _calculate_wicket_points(self, format_name: MatchFormat, wickets: int, weights: dict) -> float:
         w = weights['wickets'] # (top, mid, tail) average per wicket
         if wickets <= 3:

@@ -2,12 +2,7 @@ import pandas as pd
 import glob
 from datetime import datetime
 from typing import Dict
-
-FULL_MEMBERS = {
-    'Afghanistan', 'Australia', 'Bangladesh', 'England', 'India', 
-    'Ireland', 'New Zealand', 'Pakistan', 'South Africa', 
-    'Sri Lanka', 'West Indies', 'Zimbabwe'
-}
+from derivation.full_members import FULL_MEMBERS  
 
 def get_over_weights(format_name: str, phase_map: Dict[int, int], total_over_points: int) -> Dict[int, float]:
     phases = sorted(phase_map.keys())
