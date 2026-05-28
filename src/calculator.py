@@ -1,0 +1,88 @@
+import math
+from typing import TypedDict, Literal, Optional
+from src.weights import T20_WEIGHTS, ODI_WEIGHTS
+
+MatchFormat = Literal['T20', 'ODI']
+
+class MatchState(TypedDict):
+    score: int
+    wickets: int
+    overs: float
+    scheduledOvers: float
+
+class ParScoreResult(TypedDict):
+    parScore: float
+    target: int
+
+class CruxCalculator:
+    def __init__(self):
+        self._P_TOTAL = 200
+
+    def _get_weights(self, format_name: MatchFormat):
+        if format_name == "T20":
+            return T20_WEIGHTS
+        elif format_name == "ODI":
+            return ODI_WEIGHTS
+        else:
+            raise Exception(f"Invalid format name '{format_name}'")
+
+    def calculate_resource_footprint(self, format_name: MatchFormat, state: MatchState) -> float:
+        weights = self._get_weights(format_name)
+        
+        overs_dec = self._to_decimal_overs(state['overs'])
+        scheduled_dec = self._to_decimal_overs(state['scheduledOvers'])
+        wickets = state['wickets']
+
+        over_pts_used = self._calculate_over_points(format_name, overs_dec, weights)
+        total_over_cap = self._calculate_over_points(format_name, scheduled_dec, weights)
+        wicket_pts_used = self._calculate_wicket_points(format_name, wickets, weights)
+        total_wicket_cap = weights['wicket_target']
+
+        # Forfeited Over Capacity (Wicket-Driven)
+        forfeited_overs = (wickets / 10.0) * (total_over_cap - over_pts_used)
+
+        # Forfeited Wicket Survival (Over-Driven)
+        forfeited_wickets = (overs_dec / scheduled_dec) * (total_wicket_cap - wicket_pts_used)
+
+        return over_pts_used + wicket_pts_used + forfeited_overs + forfeited_wickets
+
+    def calculate_stabilizer(self, r_used1: float) -> int:
+        return math.ceil((self._P_TOTAL - r_used1) / 4.0)
+
+    def calculate_target(self, format_name: MatchFormat, team_a: MatchState, team_b_at_int: MatchState) -> ParScoreResult:
+        r_used1 = self.calculate_resource_footprint(format_name, team_a)
+        r_used2 = self.calculate_resource_footprint(format_name, team_b_at_int)
+        stabilizer_d = self.calculate_stabilizer(r_used1)
+
+        par_score = team_a['score'] * ((r_used2 + stabilizer_d) / (r_used1 + stabilizer_d))
+        target = math.floor(par_score) + 1
+
+        return {'parScore': par_score, 'target': target}
+
+    def _to_decimal_overs(self, overs: float) -> float:
+        full_overs = math.floor(overs)
+        balls = round((overs - full_overs) * 10)
+        if balls >= 6:
+            raise ValueError(f"Invalid overs format: {overs}. Balls component cannot be 6 or more.")
+        return full_overs + balls / 6.0
+
+    def _calculate_over_points(self, format_name: MatchFormat, overs: float, weights: dict) -> float:
+        w = weights['overs']
+        pm = weights['phase_map']
+        
+        if format_name == 'T20':
+            if overs <= pm[1]: return overs * w[1]
+            if overs <= pm[2]: return (pm[1] * w[1]) + (overs - pm[1]) * w[2]
+            return (pm[1] * w[1]) + (pm[2] - pm[1]) * w[2] + (overs - pm[2]) * w[3]
+        else: # ODI
+            if overs <= pm[1]: return overs * w[1]
+            if overs <= pm[2]: return (pm[1] * w[1]) + (overs - pm[1]) * w[2]
+            return (pm[1] * w[1]) + (pm[2] - pm[1]) * w[2] + (overs - pm[2]) * w[3]
+
+    def _calculate_wicket_points(self, format_name: MatchFormat, wickets: int, weights: dict) -> float:
+        w = weights['wickets'] # (top, mid, tail) average per wicket
+        if wickets <= 3:
+            return wickets * w[0]
+        if wickets <= 7:
+            return (3 * w[0]) + (wickets - 3) * w[1]
+        return (3 * w[0]) + (4 * w[1]) + (min(wickets, 10) - 7) * w[2]

@@ -5,3 +5,4 @@ temp/
 tmp/
 data/
 .venv/
+__pycache__/
