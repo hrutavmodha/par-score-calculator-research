@@ -91,10 +91,6 @@ bash compile.sh
 ```
 The compiled PDF and auxiliary files will be located in the `build/` directory.
 
-## Empirical Validation
-
-The repository includes a `controversial_matches.md` file documenting historically significant rain-affected matches (e.g., the 1992 and 2003 World Cup incidents) and how this model interprets them. You can run these cases via `main.py`.
-
 ## License
 
 This project is licensed under the MIT License.
