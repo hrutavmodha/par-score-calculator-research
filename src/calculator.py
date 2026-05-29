@@ -16,7 +16,7 @@ class ParScoreResult(TypedDict):
 
 class CruxCalculator:
     def __init__(self):
-        self._P_TOTAL = 200
+        pass
 
     def update_weights(self):
         """Manually trigger a recalculation of the weights."""
@@ -27,6 +27,13 @@ class CruxCalculator:
             return weights_manager.get_weights(format_name)
         except ValueError as e:
             raise Exception(str(e))
+
+    def get_total_capacity(self, format_name: MatchFormat, scheduled_overs: float) -> float:
+        weights = self._get_weights(format_name)
+        scheduled_dec = self._to_decimal_overs(scheduled_overs)
+        total_over_cap = self._calculate_over_points(format_name, scheduled_dec, weights)
+        total_wicket_cap = weights['wicket_target']
+        return total_over_cap + total_wicket_cap
 
     def calculate_resource_footprint(self, format_name: MatchFormat, state: MatchState) -> float:
         weights = self._get_weights(format_name)
@@ -48,13 +55,16 @@ class CruxCalculator:
 
         return over_pts_used + wicket_pts_used + forfeited_overs + forfeited_wickets
 
-    def calculate_stabilizer(self, r_used1: float) -> int:
-        return math.ceil((self._P_TOTAL - r_used1) / 4.0)
+    def calculate_stabilizer(self, r_used1: float, capacity1: float) -> int:
+        return math.ceil((capacity1 - r_used1) / 4.0)
 
     def calculate_target(self, format_name: MatchFormat, team_a: MatchState, team_b_at_int: MatchState) -> ParScoreResult:
         r_used1 = self.calculate_resource_footprint(format_name, team_a)
         r_used2 = self.calculate_resource_footprint(format_name, team_b_at_int)
-        stabilizer_d = self.calculate_stabilizer(r_used1)
+        
+        # Stance B: Use specifically scheduled capacity as the reference baseline
+        ref_cap1 = self.get_total_capacity(format_name, team_a['scheduledOvers'])
+        stabilizer_d = self.calculate_stabilizer(r_used1, ref_cap1)
 
         par_score = team_a['score'] * ((r_used2 + stabilizer_d) / (r_used1 + stabilizer_d))
         target = math.floor(par_score) + 1
